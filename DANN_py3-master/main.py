@@ -160,7 +160,7 @@ for epoch in range(n_epoch):
               % (epoch, i, len_dataloader, err_s_label.data.cpu().numpy(),
                  err_s_domain.data.cpu().numpy(), err_t_domain.data.cpu().item()))
     print('lets save')
-    torch.save(my_net, '{0}/mnist_svhn_model_epoch_{1}.pth'.format(model_root, epoch))
+    torch.save(my_net, '{0}/cifar_stl_model_epoch_{1}.pth'.format(model_root, epoch))
     test(source_dataset_name, epoch)
     print('source done!')
     test(target_dataset_name, epoch)
