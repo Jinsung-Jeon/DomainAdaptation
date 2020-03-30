@@ -117,8 +117,6 @@ for epoch in range(n_epoch):
         class_label = torch.LongTensor(batch_size)
         domain_label = torch.zeros(batch_size)
         domain_label = domain_label.long()
-        print(len(input_img))
-        print(len(class_label))
         if cuda:
             s_img = s_img.cuda()
             s_label = s_label.cuda()
@@ -128,12 +126,8 @@ for epoch in range(n_epoch):
 
         input_img.resize_as_(s_img).copy_(s_img)
         class_label.resize_as_(s_label).copy_(s_label)
-        print(len(input_img))
-        print(len(class_label))
 
         class_output, domain_output = my_net(input_data=input_img, alpha=alpha)
-        print(len(class_output))
-        print(len(domain_output))
         err_s_label = loss_class(class_output, class_label)
         err_s_domain = loss_domain(domain_output, domain_label)
 
