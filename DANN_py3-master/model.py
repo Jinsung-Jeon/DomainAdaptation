@@ -18,7 +18,7 @@ class CNNModel(nn.Module):
         self.feature.add_module('f_relu2', nn.ReLU(True))
 
         self.class_classifier = nn.Sequential()
-        self.class_classifier.add_module('c_fc1', nn.Linear(50 * 4 * 4, 100))
+        self.class_classifier.add_module('c_fc1', nn.Linear(50 * 5 * 5, 100))
         self.class_classifier.add_module('c_bn1', nn.BatchNorm1d(100))
         self.class_classifier.add_module('c_relu1', nn.ReLU(True))
         self.class_classifier.add_module('c_drop1', nn.Dropout2d())
@@ -29,7 +29,7 @@ class CNNModel(nn.Module):
         self.class_classifier.add_module('c_softmax', nn.LogSoftmax(dim=1))
 
         self.domain_classifier = nn.Sequential()
-        self.domain_classifier.add_module('d_fc1', nn.Linear(50 * 4 * 4, 100))
+        self.domain_classifier.add_module('d_fc1', nn.Linear(50 * 5 * 5, 100))
         self.domain_classifier.add_module('d_bn1', nn.BatchNorm1d(100))
         self.domain_classifier.add_module('d_relu1', nn.ReLU(True))
         self.domain_classifier.add_module('d_fc2', nn.Linear(100, 2))
@@ -40,7 +40,7 @@ class CNNModel(nn.Module):
         print(len(input_data))
         feature = self.feature(input_data)
         print(feature.size())
-        feature = feature.view(-1, 50 * 4 * 4)
+        feature = feature.view(-1, 50 * 5 * 5)
         print(len(feature))
         reverse_feature = ReverseLayerF.apply(feature, alpha)
         class_output = self.class_classifier(feature)
