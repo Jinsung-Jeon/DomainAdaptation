@@ -36,6 +36,8 @@ class CNNModel(nn.Module):
         self.domain_classifier.add_module('d_softmax', nn.LogSoftmax(dim=1))
 
     def forward(self, input_data, alpha):
+        input_data = input_data.expand(input_data.data.shape[0], 3, 32, 32)
+        print(len(input_data))
         feature = self.feature(input_data)
         feature = feature.view(-1, 50 * 4 * 4)
         reverse_feature = ReverseLayerF.apply(feature, alpha)
