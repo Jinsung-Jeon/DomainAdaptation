@@ -41,8 +41,8 @@ def test(dataset_name, epoch):
             split='test',
             download=True
         )
-        from modify_cifar_stl import modify_cifar_t
-        modify_cifar_t(dataset)
+        from modify_cifar_stl import modify_stl
+        modify_stl(dataset)
 
     else:
         dataset = datasets.CIFAR10(
@@ -50,8 +50,8 @@ def test(dataset_name, epoch):
             train=False,
             transform=img_transform_source,
         )
-        from modify_cifar_stl import modify_stl
-        modify_cifar(dataset)
+        from modify_cifar_stl import modify_cifar_t
+        modify_cifar_t(dataset)
     dataloader = torch.utils.data.DataLoader(
         dataset=dataset,
         batch_size=batch_size,
