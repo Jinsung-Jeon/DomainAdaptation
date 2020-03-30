@@ -132,6 +132,8 @@ for epoch in range(n_epoch):
         print(len(class_label))
 
         class_output, domain_output = my_net(input_data=input_img, alpha=alpha)
+        print(len(class_output))
+        print(len(domain_output))
         err_s_label = loss_class(class_output, class_label)
         err_s_domain = loss_domain(domain_output, domain_label)
 
