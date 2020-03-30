@@ -5,6 +5,8 @@ Created on Fri Mar 13 23:56:51 2020
 @author: Jinsung
 """
 
+check point
+
 from __future__ import print_function
 import numpy as np
 import argparse
