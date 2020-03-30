@@ -7,15 +7,15 @@ from torchvision import datasets
 
 
 def test(dataset_name, epoch):
-    assert dataset_name in ['MNIST', 'SVHN']
+    assert dataset_name in ['CIFAR10', 'STL10']
 
-    model_root = '/jinsung/DA/DANN_py3-master/models'
+    model_root = '/jinsung/DomainAdaptation/DANN_py3-master/models'
     image_root = os.path.join('dataset', dataset_name)
 
     cuda = True
     cudnn.benchmark = True
     batch_size = 128
-    image_size = 28
+    image_size = 32
     alpha = 0
 
     """load data"""
@@ -23,31 +23,35 @@ def test(dataset_name, epoch):
     img_transform_source = transforms.Compose([
         transforms.Resize(image_size),
         transforms.ToTensor(),
-        transforms.Normalize(mean=(0.1307,), std=(0.3081,))
+        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2470, 0.2430, 0.2610))
     ])
 
     img_transform_target = transforms.Compose([
         transforms.Resize(image_size),
         transforms.ToTensor(),
-        transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
+        transforms.Normalize((0.4467, 0.4398, 0.4066), (0.2603, 0.2565, 0.2712))
     ])
 
-    if dataset_name == 'SVHN':
+    if dataset_name == 'STL10':
         test_list = os.path.join(image_root, 'svhn_test_labels.txt')
 
-        dataset = datasets.SVHN(
+        dataset = datasets.STL10(
             root='dataset',
             transform=img_transform_source,
+            split='test',
             download=True
         )
-        
+        from modify_cifar_stl import modify_cifar_t
+        modify_cifar_t(dataset)
+
     else:
-        dataset = datasets.MNIST(
+        dataset = datasets.CIFAR10(
             root='dataset',
             train=False,
             transform=img_transform_source,
         )
-
+        from modify_cifar_stl import modify_stl
+        modify_cifar(dataset)
     dataloader = torch.utils.data.DataLoader(
         dataset=dataset,
         batch_size=batch_size,
@@ -58,7 +62,7 @@ def test(dataset_name, epoch):
     """ training """
 
     my_net = torch.load(os.path.join(
-        model_root, 'mnist_svhn_model_epoch_' + str(epoch) + '.pth'
+        model_root, 'cifar_stl_model_epoch_' + str(epoch) + '.pth'
     ))
     my_net = my_net.eval()
 
