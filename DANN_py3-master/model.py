@@ -41,6 +41,7 @@ class CNNModel(nn.Module):
         feature = self.feature(input_data)
         print(len(feature))
         feature = feature.view(-1, 50 * 4 * 4)
+        print(len(feature))
         reverse_feature = ReverseLayerF.apply(feature, alpha)
         class_output = self.class_classifier(feature)
         domain_output = self.domain_classifier(reverse_feature)
