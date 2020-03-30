@@ -10,8 +10,8 @@ from model import CNNModel
 import numpy as np
 from test import test
 
-source_dataset_name = 'MNIST'
-target_dataset_name = 'SVHN'
+source_dataset_name = 'CIFAR10'
+target_dataset_name = 'STL10'
 source_image_root = os.path.join('dataset', source_dataset_name)
 target_image_root = os.path.join('dataset', target_dataset_name)
 model_root = 'models'
@@ -19,7 +19,7 @@ cuda = True
 cudnn.benchmark = True
 lr = 1e-3
 batch_size = 128
-image_size = 28
+image_size = 32
 n_epoch = 1
 
 manual_seed = random.randint(1, 10000)
@@ -31,21 +31,24 @@ torch.manual_seed(manual_seed)
 img_transform_source = transforms.Compose([
     transforms.Resize(image_size),
     transforms.ToTensor(),
-    transforms.Normalize(mean=(0.1307,), std=(0.3081,))
+    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2470, 0.2430, 0.2610))
 ])
 
 img_transform_target = transforms.Compose([
     transforms.Resize(image_size),
     transforms.ToTensor(),
-    transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
+    transforms.Normalize((0.4467, 0.4398, 0.4066), (0.2603, 0.2565, 0.2712))
 ])
 
-dataset_source = datasets.MNIST(
+dataset_source = datasets.CIFAR10(
     root='dataset',
     train=True,
     transform=img_transform_source,
     download=True
 )
+
+from modify_cifar_stl import modify_cifar
+modify_cifar(dataset_source)
 
 dataloader_source = torch.utils.data.DataLoader(
     dataset=dataset_source,
@@ -55,11 +58,14 @@ dataloader_source = torch.utils.data.DataLoader(
 
 train_list = os.path.join(target_image_root, 'svhn_train_labels.txt')
 
-dataset_target = datasets.SVHN(
+dataset_target = datasets.STL10(
     root='dataset',
-    transform=img_transform_source,
+    transform=img_transform_target,
     download=True
 )
+
+from modify_cifar_stl import modify_stl
+modify_stl(dataset_target)
 
 dataloader_target = torch.utils.data.DataLoader(
     dataset=dataset_target,
