@@ -12,7 +12,6 @@ class ReverseLayerF(Function):
     @staticmethod
     def backward(ctx, grad_output):
         output = grad_output.neg() * ctx.alpha
-
         return output, None
 
 

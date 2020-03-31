@@ -10,6 +10,6 @@ class ReverseLayerF(Function):
     @staticmethod
     def backward(grad_output):
         output = grad_output.neg()
-        return output, None
+        return output
 
 
