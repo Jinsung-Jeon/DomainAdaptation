@@ -66,7 +66,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
         #target domain prepare
         tg_te_inputs = tg_te_inputs.cuda()
-        domain_label = torch.ones(batch_size)
+        domain_label = torch.ones(len(tg_te_inputs))
         domain_label = domain_label.long().cuda()
 
         #target train
@@ -74,6 +74,10 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         err_t_domain = criterion_domain(domain_output, domain_label)
 
         err = err_t_domain + loss_cls + loss_domain
+
+        print(loss_cls)
+        print(err_t_domain)
+        print(loss_domain)
         err.backward()
         optimizer_cls.step()
         
