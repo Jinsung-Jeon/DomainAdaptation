@@ -18,7 +18,7 @@ def test(dataloader, model):
         inputs, labels = inputs.cuda(), labels.cuda()
         with torch.no_grad():
             outputs = model(inputs, alpha)
-        _, predicted = outputs[0].max(1)
+        _, predicted = outputs.max(1)
         total += labels.size(0)
         correct += predicted.eq(labels).sum().item()
     model.train()
