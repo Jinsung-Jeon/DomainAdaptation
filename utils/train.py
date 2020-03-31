@@ -27,6 +27,20 @@ def test(dataloader, model):
     
     return 1 - correct_cls/total, 1 - correct_domain/total
 
+def test_d(dataloader, model):
+    model.eval()
+    correct = 0
+    total = 0
+    for batch_idx, (inputs, labels) in enumerate(dataloader):
+        inputs, labels = inputs.cuda(), labels.cuda()
+        with torch.no_grad():
+            outputs = model(inputs)
+        _, predicted = outputs.max(1)
+        total += labels.size(0)
+        correct += predicted.eq(labels).sum().item()
+    model.train()
+    return 1 - correct / total
+
 def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_te_loader):
     net.train() 
     for sstask in sstasks:
