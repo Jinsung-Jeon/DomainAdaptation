@@ -58,7 +58,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         t_img.cuda()
 
         domain_label = torch.ones(batch_size)
-        domain_labels = domain_label.long().cdua()
+        domain_labels = domain_label.long().cuda()
 
         input_img.resize_as_(t_img).copy_(t_img)
 
