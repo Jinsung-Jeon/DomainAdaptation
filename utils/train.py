@@ -54,16 +54,19 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         t_img, _ = data_target
 
         batch_size = len(t_img)
-        input_img = torch.FloatTensor(batch_size, 3, 32, 32).cuda()
-        t_img.cuda()
 
+        input_img = torch.FloatTensor(batch_size, 3, 32, 32).cuda()
         domain_label = torch.ones(batch_size)
-        domain_labels = domain_label.long().cuda()
+        domain_label = domain_label.long()
+
+        t_img.cuda()
+        input_img.cuda()
+        domain_label.cuda()
 
         input_img.resize_as_(t_img).copy_(t_img)
 
         _, domain_output = net(input_img, alpha)
-        err_t_domain = loss_domain(domain_output, domain_labels)
+        err_t_domain = loss_domain(domain_output, domain_label)
         err = err_t_domain + loss_cls + loss_domain
         err.backward()
         optimizer_cls.step()
