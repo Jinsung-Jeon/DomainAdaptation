@@ -20,7 +20,7 @@ cudnn.benchmark = True
 lr = 1e-3
 batch_size = 128
 image_size = 32
-n_epoch = 100
+n_epoch = 50
 
 manual_seed = random.randint(1, 10000)
 random.seed(manual_seed)
@@ -104,8 +104,8 @@ for epoch in range(n_epoch):
     while i < len_dataloader:
 
         p = float(i + epoch * len_dataloader) / n_epoch / len_dataloader
-        alpha = 2. / (1. + np.exp(-10 * p)) - 1
-
+        #alpha = 2. / (1. + np.exp(-10 * p)) - 1
+        alpha = 1
         # training model using source data
         data_source = data_source_iter.next()
         s_img, s_label = data_source

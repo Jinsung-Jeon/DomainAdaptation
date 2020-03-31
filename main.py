@@ -75,9 +75,6 @@ if(args.method=='self-supervision'):
     ext = torch.nn.DataParallel(ext)
     net.cuda()
     ext.cuda()
-elif(args.method=='DANN'):
-    net = ResNet(args.depth, args.width, classes=classes, channels=channels).cuda()
-    ext = extractor_from_layer3(net)
     
 print('==> Preparing datasets..')
 sc_tr_dataset, sc_te_dataset = prepare_dataset(args.source, image_size, channels, path=args.data_root)

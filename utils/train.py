@@ -46,14 +46,12 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
     for sstask in sstasks:
         sstask.head.train()
         sstask.scheduler.step()
-    epoch = 0
-    epoch += 1
     epoch_stats = []
-    for batch_idx, (sc_tr_inputs, sc_tr_labels) in enumerate(sc_tr_loader):
+    for batch_idx, ((sc_tr_inputs, sc_tr_labels),(tg_te_inputs, _)) in enumerate(zip(sc_tr_loader,tg_te_loader)):
         for sstask in sstasks:
             sstask.train_batch()
-
         sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
+
         domain_label = torch.zeros(len(sc_tr_inputs))
         domain_label = domain_label.long().cuda()
         optimizer_cls.zero_grad()
