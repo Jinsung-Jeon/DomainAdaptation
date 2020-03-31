@@ -23,8 +23,6 @@ def test(dataloader, model):
         total += labels.size(0)
         correct_cls += predicted_cls.eq(labels).sum().item()
         correct_domain += predicted_domain.eq(1).sum().item()
-    print(correct_cls/total)
-    print(correct_domain/total)
     model.train()
     
     return 1 - correct_cls/total, 1 - correct_domain/total
@@ -41,7 +39,6 @@ def test_d(dataloader, model):
         total += labels.size(0)
         correct += predicted.eq(labels).sum().item()
     model.train()
-    print(correct/total)
     return 1 - correct / total
 
 def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader):
@@ -75,10 +72,6 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         err_t_domain = criterion_domain(domain_output, domain_label)
 
         err = err_t_domain + loss_cls + loss_domain
-
-        print(loss_cls)
-        print(err_t_domain)
-        print(loss_domain)
 
         err.backward()
         optimizer_cls.step()
