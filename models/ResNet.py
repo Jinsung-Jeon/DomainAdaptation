@@ -95,7 +95,7 @@ class ResNetCifar(nn.Module):
         x = self.relu(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        reverse_feature = ReverseLayerF.apply(x, alpha)
+        reverse_feature = ReverseLayerF.apply(x)
         domain_output = self.fc2(reverse_feature)
         x = self.fc(x)
         

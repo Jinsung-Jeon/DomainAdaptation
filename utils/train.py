@@ -14,11 +14,10 @@ def test(dataloader, model):
     correct_cls = 0
     correct_domain = 0
     total = 0
-    alpha = 0
     for batch_idx, (inputs, labels) in enumerate(dataloader):
         inputs, labels = inputs.cuda(), labels.cuda()
         with torch.no_grad():
-            outputs_cls, outputs_domain = model(inputs, alpha)
+            outputs_cls, outputs_domain = model(inputs)
         _, predicted_cls = outputs_cls.max(1)
         _, predicted_domain = outputs_domain.max(1)
         total += labels.size(0)
@@ -45,13 +44,9 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         domain_label = domain_label.long().cuda()
         optimizer_cls.zero_grad()
 
-        p = float(batch_idx + epoch * len(sc_tr_loader)) / args.nepoch / len(sc_tr_loader)
-        alpha = 2. / (1. + np.exp(-10 * p)) - 1
-
-        outputs_cls, domain_output = net(sc_tr_inputs, alpha)
+        outputs_cls, domain_output = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
         loss_domain = criterion_domain(domain_output, domain_label)
-
 
         #target domain
         data_target_iter = iter(tg_te_loader)
@@ -70,7 +65,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
         input_img.resize_as_(t_img).copy_(t_img)
 
-        _, domain_output = net(input_img, alpha)
+        _, domain_output = net(input_img)
         err_t_domain = criterion_domain(domain_output, domain_label)
         err = err_t_domain + loss_cls + loss_domain
         err.backward()
