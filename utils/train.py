@@ -18,8 +18,8 @@ def test(dataloader, model):
         inputs, labels = inputs.cuda(), labels.cuda()
         with torch.no_grad():
             outputs = model(inputs, alpha)
-        print(len(outputs))
-        print(outputs.size())
+        print(outputs[0])
+        print(outputs[1])
         _, predicted = outputs.max(1)
         total += labels.size(0)
         correct += predicted.eq(labels).sum().item()
