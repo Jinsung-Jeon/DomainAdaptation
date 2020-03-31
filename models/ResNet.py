@@ -9,6 +9,7 @@ import math
 import torch
 from torch import nn
 from torchvision.models.resnet import conv3x3
+from utils.functions import ReverseLayerF
 
 class BasicBlock(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None):
@@ -64,7 +65,8 @@ class ResNetCifar(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.avgpool = nn.AvgPool2d(8)
         self.fc = nn.Linear(64 * width, classes)
-        
+        self.fc2 = nn.Linear(64 * width, 2)
+
         # Initialization
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -84,7 +86,7 @@ class ResNetCifar(nn.Module):
             layers.append(block(self.inplanes, planes))
         return nn.Sequential(*layers)
     
-    def forward(self, x):
+    def forward(self, x, alpha):
         x = self.conv1(x)
         x = self.layer1(x)
         x = self.layer2(x)
@@ -93,7 +95,9 @@ class ResNetCifar(nn.Module):
         x = self.relu(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
+        reverse_feature = ReverseLayerF.apply(x, alpha)
+        domain_output = self.fc2(reverse_feature)
         x = self.fc(x)
         
-        return x
+        return x, domain_output
 
