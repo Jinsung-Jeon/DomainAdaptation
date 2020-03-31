@@ -58,10 +58,10 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         input_img = torch.FloatTensor(batch_size, 3, 32, 32).cuda()
         domain_label = torch.ones(batch_size)
         domain_label = domain_label.long()
-
-        t_img.cuda()
-        input_img.cuda()
-        domain_label.cuda()
+        if cuda:
+            t_img.cuda()
+            input_img.cuda()
+            domain_label.cuda()
 
         input_img.resize_as_(t_img).copy_(t_img)
 
