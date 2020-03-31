@@ -54,7 +54,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
             sstask.train_batch()
 
         sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
-        domain_label = torch.zeros(args.batch_size)
+        domain_label = torch.zeros(len(sc_tr_inputs))
         domain_label = domain_label.long().cuda()
         optimizer_cls.zero_grad()
 
