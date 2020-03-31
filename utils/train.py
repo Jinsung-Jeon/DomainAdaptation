@@ -19,11 +19,13 @@ def test(dataloader, model):
         with torch.no_grad():
             outputs_cls, outputs_domain = model(inputs, alpha)
         _, predicted_cls = outputs_cls.max(1)
+        _, predicted_domain = outputs_domain.max(1)
         total += labels.size(0)
-        correct += predicted.eq(labels).sum().item()
+        correct_cls += predicted_cls.eq(labels).sum().item()
+        correct_domain += predicted_domain.eq(1).sum().item()
     model.train()
     
-    return 1 - correct/total
+    return 1 - correct_cls/total, 1 - correct_domain/total
 
 def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_te_loader):
     net.train() 
