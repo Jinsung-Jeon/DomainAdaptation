@@ -68,7 +68,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         input_img.resize_as_(t_img).copy_(t_img)
 
         _, domain_output = net(input_img, alpha)
-        err_t_domain = loss_domain(domain_output, domain_label)
+        err_t_domain = criterion_domain(domain_output, domain_label)
         err = err_t_domain + loss_cls + loss_domain
         err.backward()
         optimizer_cls.step()
