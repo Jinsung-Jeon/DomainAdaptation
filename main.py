@@ -32,7 +32,7 @@ parser.add_argument('--source', required=True)
 parser.add_argument('--target', required=True)
 ################################################################
 parser.add_argument('--nepoch', default=15, type=int)
-parser.add_argument('--lr', default=0.1, type=float)
+parser.add_argument('--lr', default=1e-3, type=float)
 parser.add_argument('--milestone_1', default=5, type=int)
 parser.add_argument('--milestone_2', default=10, type=int)
 parser.add_argument('--batch_size', default=128, type=int)
