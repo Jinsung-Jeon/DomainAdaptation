@@ -70,10 +70,10 @@ else:
 print('==> Building model..')
 if(args.method=='self-supervision'):
     net = ResNet(args.depth, args.width, classes=classes, channels=channels)
-    net = torch.nn.DataParallel(net)
-    net.cuda()
     ext = extractor_from_layer3(net)
+    net = torch.nn.DataParallel(net)
     ext = torch.nn.DataParallel(ext)
+    net.cuda()
     ext.cuda()
 elif(args.method=='DANN'):
     net = ResNet(args.depth, args.width, classes=classes, channels=channels).cuda()
