@@ -53,7 +53,7 @@ def parse_all_epoch_stats(all_epoch_stats, prune=True):
 
 def plot_all_epoch_stats(all_epoch_stats, outf):
 	import matplotlib.pyplot as plt
-	ticks, labels, xs, tg_te_err, sc_te_err, us_te_err, mmd = parse_all_epoch_stats(all_epoch_stats)
+	ticks, labels, xs, tg_te_err, sc_te_err, sc_domain_err, tg_domain_err, us_te_err, mmd = parse_all_epoch_stats(all_epoch_stats)
 
 	mmd = np.asarray(mmd)
 	plt.plot(xs, mmd / np.max(mmd)*100, color='k', label='normalized mmd')
