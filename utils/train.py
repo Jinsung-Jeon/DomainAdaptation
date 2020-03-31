@@ -11,7 +11,8 @@ import numpy as np
 
 def test(dataloader, model):
     model.eval()
-    correct = 0
+    correct_cls = 0
+    correct_domain = 0
     total = 0
     alpha = 0
     for batch_idx, (inputs, labels) in enumerate(dataloader):
