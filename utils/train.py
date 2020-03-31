@@ -49,6 +49,8 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
         loss_domain = criterion_domain(domain_output, domain_label)
 
+
+        #target domain
         data_target_iter = iter(tg_te_loader)
         data_target = data_target_iter.next()
         t_img, _ = data_target
@@ -59,10 +61,11 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         domain_label = torch.ones(batch_size)
         domain_label = domain_label.long()
 
-        t_img.cuda()
-        input_img.cuda()
-        domain_label.cuda()
+        t_img = t_img.cuda()
+        input_img = input_img.cuda()
+        domain_label = domain_label.cuda()
 
+        input_img.resize_as_(t_img).copy_(t_img)
 
         _, domain_output = net(input_img, alpha)
         err_t_domain = loss_domain(domain_output, domain_label)
