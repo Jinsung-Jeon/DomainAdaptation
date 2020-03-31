@@ -13,7 +13,6 @@ import torch.utils.data as torchdata
 from utils.train import test
 from utils.train import test_d
 from utils.SSTask import SSTask
-from utils.SSTask import DLTask
 from utils.SSHead import linear_on_layer3
 from dset_classes.DsetNoLabel import DsetNoLabel
 
