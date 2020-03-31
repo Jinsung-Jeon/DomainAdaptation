@@ -23,6 +23,8 @@ def test(dataloader, model):
         total += labels.size(0)
         correct_cls += predicted_cls.eq(labels).sum().item()
         correct_domain += predicted_domain.eq(1).sum().item()
+        print(correct_cls)
+        print(correct_domain)
     model.train()
     
     return 1 - correct_cls/total, 1 - correct_domain/total
@@ -50,35 +52,27 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
     for batch_idx, ((sc_tr_inputs, sc_tr_labels),(tg_te_inputs, _)) in enumerate(zip(sc_tr_loader,tg_te_loader)):
         for sstask in sstasks:
             sstask.train_batch()
-        sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
 
+        #source domain prepare
+        sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
         domain_label = torch.zeros(len(sc_tr_inputs))
         domain_label = domain_label.long().cuda()
         optimizer_cls.zero_grad()
 
+        #source domain train
         outputs_cls, domain_output = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
         loss_domain = criterion_domain(domain_output, domain_label)
 
-        #target domain
-        data_target_iter = iter(tg_te_loader)
-        data_target = data_target_iter.next()
-        t_img, _ = data_target
-
-        batch_size = len(t_img)
-
-        input_img = torch.FloatTensor(batch_size, 3, 32, 32)
+        #target domain prepare
+        tg_te_inputs = tg_te_inputs.cuda()
         domain_label = torch.ones(batch_size)
-        domain_label = domain_label.long()
+        domain_label = domain_label.long().cuda()
 
-        t_img = t_img.cuda()
-        input_img = input_img.cuda()
-        domain_label = domain_label.cuda()
-
-        input_img.resize_as_(t_img).copy_(t_img)
-
-        _, domain_output = net(input_img)
+        #target train
+        _, domain_output = net(tg_te_inputs)
         err_t_domain = criterion_domain(domain_output, domain_label)
+
         err = err_t_domain + loss_cls + loss_domain
         err.backward()
         optimizer_cls.step()
