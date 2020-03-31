@@ -67,7 +67,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
         #target domain prepare
         tg_tr_inputs = tg_tr_inputs.cuda()
-        domain_label = torch.ones(len(tg_te_inputs))
+        domain_label = torch.ones(len(tg_tr_inputs))
         domain_label = domain_label.long().cuda()
 
         #target train
