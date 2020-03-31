@@ -39,14 +39,18 @@ def prepare_dataset(dataset_name, image_size, channels=3, path='/jinsung/DA/data
         if channels == 3:
             from dset_classes.DsetThreeChannels import ThreeChannels
             tr_dataset = ThreeChannels(tr_dataset)
-            te_dataset = ThreeChannels(te_dataset)    
-    
+            te_dataset = ThreeChannels(te_dataset)
+
     elif dataset_name == 'cifar10':
-        tr_dataset = torchvision.datasets.CIFAR10(path + '/', train=True, download=True, transform=transforms.Compose([transforms.Resize(image_size),transforms.ToTensor(),transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2470, 0.2430, 0.2610))]))
-        te_dataset = torchvision.datasets.CIFAR10(path + '/', train=False, download=True, transform=transforms.Compose([transforms.Resize(image_size),transforms.ToTensor(),transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2470, 0.2430, 0.2610))]))
-        from dset_loaders.modify_cifar_stl import modify_cifar
+        tr_dataset = torchvision.datasets.CIFAR10(path + '/', train=True, download=True, transform=transforms.Compose(
+            [transforms.Resize(image_size), transforms.ToTensor(),
+             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2470, 0.2430, 0.2610))]))
+        te_dataset = torchvision.datasets.CIFAR10(path + '/', train=False, download=True, transform=transforms.Compose(
+            [transforms.Resize(image_size), transforms.ToTensor(),
+             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2470, 0.2430, 0.2610))]))
+        from dset_loaders.modify_cifar_stl import modify_cifar, modify_cifar_t
         modify_cifar(tr_dataset)
-        modify_cifar(te_dataset)
+        modify_cifar_t(te_dataset)
 
     elif dataset_name == 'stl10':
         tr_dataset = torchvision.datasets.STL10(path + '/', split='train', download=True, transform=transforms.Compose([transforms.Resize(image_size),transforms.ToTensor(),transforms.Normalize((0.4467, 0.4398, 0.4066), (0.2603, 0.2565, 0.2712))]))
