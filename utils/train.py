@@ -54,7 +54,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         t_img, _ = data_target
 
         batch_size = len(t_img)
-        input_img = torch.FloatTensor(batch_size, 3, 32, 32).cdua()
+        input_img = torch.FloatTensor(batch_size, 3, 32, 32).cuda()
         t_img.cuda()
 
         domain_label = torch.ones(batch_size)
