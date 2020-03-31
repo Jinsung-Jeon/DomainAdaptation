@@ -38,7 +38,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
         sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
         domain_label = torch.zeros(args.batch_size)
-        domain_label = domain_label.lond().cuda()
+        domain_label = domain_label.long().cuda()
         optimizer_cls.zero_grad()
 
         p = float(batch_idx + epoch * len(sc_tr_loader)) / n_epoch / len(sc_tr_loader)
