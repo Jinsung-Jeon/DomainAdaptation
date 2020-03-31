@@ -24,7 +24,7 @@ def test(dataloader, model):
         correct_cls += predicted_cls.eq(labels).sum().item()
         correct_domain += predicted_domain.eq(1).sum().item()
     print(correct_cls/total)
-    print(correct_domain/toal)
+    print(correct_domain/total)
     model.train()
     
     return 1 - correct_cls/total, 1 - correct_domain/total
