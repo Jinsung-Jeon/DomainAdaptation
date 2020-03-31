@@ -29,8 +29,8 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
     for sstask in sstasks:
         sstask.head.train()
         sstask.scheduler.step()
-    n_epoch = 0
-    n_epoch += 1
+    epoch = 0
+    epoch += 1
     epoch_stats = []
     for batch_idx, (sc_tr_inputs, sc_tr_labels) in enumerate(sc_tr_loader):
         for sstask in sstasks:
@@ -41,7 +41,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         domain_label = domain_label.long().cuda()
         optimizer_cls.zero_grad()
 
-        p = float(batch_idx + epoch * len(sc_tr_loader)) / n_epoch / len(sc_tr_loader)
+        p = float(batch_idx + epoch * len(sc_tr_loader)) / args.nepoch / len(sc_tr_loader)
         alpha = 2. / (1. + np.exp(-10 * p)) - 1
 
         outputs_cls, domain_output = net(sc_tr_inputs, alpha)
