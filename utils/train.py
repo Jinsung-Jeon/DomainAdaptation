@@ -7,6 +7,7 @@ Created on Fri Feb  7 17:43:06 2020
 
 import torch
 from utils.get_mmd import get_mmd
+import numpy as np
 
 def test(dataloader, model):
     model.eval()
