@@ -17,10 +17,8 @@ def test(dataloader, model):
     for batch_idx, (inputs, labels) in enumerate(dataloader):
         inputs, labels = inputs.cuda(), labels.cuda()
         with torch.no_grad():
-            outputs = model(inputs, alpha)
-        print(len(outputs[0]))
-        print(len(outputs[1]))
-        _, predicted = outputs.max(1)
+            outputs_cls, outputs_domain = model(inputs, alpha)
+        _, predicted_cls = outputs_cls.max(1)
         total += labels.size(0)
         correct += predicted.eq(labels).sum().item()
     model.train()
