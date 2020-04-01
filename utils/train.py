@@ -72,7 +72,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         err_t_domain = criterion_domain(domain_output, domain_label)
 
         err = err_t_domain + loss_cls + loss_domain
-        print(err)
+
         err.backward()
         optimizer_cls.step()
         
@@ -92,5 +92,5 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
             for err in us_te_err_av:
                 display += '%.2f\t'%(err*100)
             print(display)
-    
+    print(err)
     return epoch_stats
