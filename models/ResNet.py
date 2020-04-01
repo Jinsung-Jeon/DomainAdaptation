@@ -9,7 +9,6 @@ import math
 import torch
 from torch import nn
 from torchvision.models.resnet import conv3x3
-from utils.functions import ReverseLayerF
 
 class BasicBlock(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None):
@@ -95,8 +94,7 @@ class ResNetCifar(nn.Module):
         x = self.relu(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        reverse_feature = ReverseLayerF.apply(x)
-        domain_output = self.fc2(reverse_feature)
+        domain_output = self.fc2(x)
         x = self.fc(x)
         
         return x, domain_output

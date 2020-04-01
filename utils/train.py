@@ -75,7 +75,19 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
         err.backward()
         optimizer_cls.step()
-        
+
+        optimizer_cls.zero_grad()
+        tg_tr_inputs = tg_tr_inputs.cuda()
+        _, domain_output = net(tg_tr_inputs)
+
+        domain_label = torch.zeros(len(tg_tr_inputs))
+        domain_label = domain_label.long().cuda()
+
+        loss_tgt =  criterion_domain(domain_output, domain_label)
+        loss_tgt. backward()
+
+        optimizer_cls.step()
+
         if batch_idx % args.num_batches_per_test == 0:
             sc_te_err, sc_domain_err = test(sc_te_loader, net)
             tg_te_err, tg_domain_err = test(tg_te_loader, net)
