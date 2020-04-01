@@ -72,7 +72,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         err_t_domain = criterion_domain(domain_output, domain_label)
 
         err = err_t_domain + loss_cls + loss_domain
-
+        print(err)
         err.backward()
         optimizer_cls.step()
         

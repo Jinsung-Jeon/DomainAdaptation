@@ -153,9 +153,7 @@ for epoch in range(n_epoch):
         err = err_t_domain + err_s_domain + err_s_label
         err.backward()
         optimizer.step()
-        print(err_t_domain)
-        print(err_s_domain)
-        print(err_s_label)
+
         i += 1
 
         print ('epoch: %d [iter: %d / all %d], err_s_label: %f, err_s_domain: %f, err_t_domain: %f' \
