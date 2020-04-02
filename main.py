@@ -93,7 +93,8 @@ criterion_d  = nn.CrossEntropyLoss().cuda()
 parameters = list(net.parameters())
 for sstask in sstasks:
     parameters += list(sstask.head.parameters())
-optimizer = optim.SGD(parameters, lr=args.lr, momentum=0.9, weight_decay=5e-4)
+#optimizer = optim.SGD(parameters, lr=args.lr, momentum=0.9, weight_decay=5e-4)
+optimizer = optim.Adam(parameters, lr=args.lr, betas=(0.5, 0.9), weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [args.milestone_1, args.milestone_2], gamma=0.1, last_epoch=-1)
     
 all_epoch_stats = []
