@@ -92,8 +92,8 @@ tg_te_loader = torchdata.DataLoader(tg_te_dataset, batch_size=args.batch_size, s
 
 sstasks = parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
 criterion = nn.CrossEntropyLoss().cuda()
-#criterion_d  = nn.CrossEntropyLoss().cuda()
-criterion_d = loss_fn_kd().cuda()
+criterion_d  = nn.CrossEntropyLoss().cuda()
+
 parameters = list(net.parameters())
 for sstask in sstasks:
     parameters += list(sstask.head.parameters())
