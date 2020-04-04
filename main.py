@@ -68,7 +68,8 @@ if (args.source=='cifar10' and args.target=='stl10') or (args.source=='stl10' an
     classes = 9
 else:
     classes = 10
-    
+
+
 print('==> Building model..')
 if(args.method=='self-supervision'):
     net = ResNet(args.depth, args.width, classes=classes, channels=channels)
