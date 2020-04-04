@@ -64,7 +64,7 @@ if (args.source=='usps' and args.target=='mnist') or (args.source=='mnist' and a
 else:
     channels = 3
 
-if (args.source=='cifar' and args.target=='stl') or (args.source=='stl' and args.target=='cifar'):
+if (args.source=='cifar10' and args.target=='stl10') or (args.source=='stl10' and args.target=='cifar10'):
     classes = 9
 else:
     classes = 10
