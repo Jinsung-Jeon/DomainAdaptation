@@ -42,15 +42,18 @@ def test_d(dataloader, model):
     return 1 - correct / total
 
 def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader):
-    net.train() 
+    net.train()
+    '''
     for sstask in sstasks:
         sstask.head.train()
         sstask.scheduler.step()
+    '''
     epoch_stats = []
     for batch_idx, ((sc_tr_inputs, sc_tr_labels),(tg_tr_inputs, _)) in enumerate(zip(sc_tr_loader,tg_tr_loader)):
+        '''
         for sstask in sstasks:
             sstask.train_batch()
-
+        '''
         #source domain prepare
         sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
         domain_label = torch.zeros(len(sc_tr_inputs))
@@ -83,9 +86,8 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         domain_label = torch.zeros(len(tg_tr_inputs))
         domain_label = domain_label.long().cuda()
 
-        loss_tgt =  criterion_domain(domain_output, domain_label)
+        loss_tgt = criterion_domain(domain_output, domain_label)
         loss_tgt. backward()
-
         optimizer_cls.step()
 
         if batch_idx % args.num_batches_per_test == 0:
@@ -94,10 +96,11 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
             
             us_te_err_av = []
+            '''
             for sstask in sstasks:
                 err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
-                
+            '''
             epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, us_te_err_av))
             display = ('Iteration %d/%d:' %(batch_idx, len(sc_tr_loader))).ljust(24)
             display += '%.2f\t%.2f\t\t%.2f\t\t' %(mmd, tg_te_err*100, sc_te_err*100)

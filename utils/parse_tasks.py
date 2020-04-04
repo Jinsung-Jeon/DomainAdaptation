@@ -41,8 +41,7 @@ def parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_da
         
         head = linear_on_layer3(4, args.width, 8).cuda()
         criterion = nn.CrossEntropyLoss().cuda()
-        #optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = args.lr_rotation, momentum=0.9, weight_decay=5e-4)
-        optimizer = optim.Adam(list(ext.parameters()) + list(head.parameters()), lr=args.lr_rotation, betas=(0.5, 0.9), weight_decay=5e-4)
+        optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = args.lr_rotation, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [args.milestone_1, args.milestone_2], gamma=0.1, last_epoch=-1)
         sstask = SSTask(ext, head, criterion, optimizer, scheduler, su_tr_loader, su_te_loader, tu_tr_loader, tu_te_loader)
         sstask.assign_test(test_d)
@@ -65,8 +64,7 @@ def parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_da
         
         head = linear_on_layer3(4, args.width, 4).cuda()
         criterion = nn.CrossEntropyLoss().cuda()
-        #optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = args.lr_quadrant, momentum=0.9, weight_decay=5e-4)
-        optimizer = optim.Adam(list(ext.parameters()) + list(head.parameters()), lr=args.lr_quadrant, betas=(0.5, 0.9),weight_decay=5e-4)
+        optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = args.lr_quadrant, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [args.milestone_1, args.milestone_2], gamma=0.1, last_epoch=-1)
         sstask = SSTask(ext, head, criterion, optimizer, scheduler, su_tr_loader, su_te_loader, tu_tr_loader, tu_te_loader)
         sstask.assign_test(test_d)
@@ -91,7 +89,7 @@ def parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_da
         
         head = linear_on_layer3(2, args.width, 8).cuda()
         criterion = nn.CrossEntropyLoss().cuda()
-        optimizer = optim.Adam(list(ext.parameters()) + list(head.parameters()), lr=args.lr_flip, betas=(0.5, 0.9), weight_decay=5e-4)
+        optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = args.lr_flip, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [args.milestone_1, args.milestone_2], gamma=0.1, last_epoch=-1)
         sstask = SSTask(ext, head, criterion, optimizer, scheduler, su_tr_loader, su_te_loader, tu_tr_loader, tu_te_loader)
         sstask.assign_test(test_d)

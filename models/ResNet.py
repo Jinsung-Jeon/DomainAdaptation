@@ -94,8 +94,8 @@ class ResNetCifar(nn.Module):
         x = self.relu(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        domain_output = self.fc2(x)
         x = self.fc(x)
+        domain_output = self.fc2(x)
         
         return x, domain_output
 

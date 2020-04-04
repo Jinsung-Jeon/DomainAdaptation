@@ -89,12 +89,12 @@ tg_te_loader = torchdata.DataLoader(tg_te_dataset, batch_size=args.batch_size, s
 
 sstasks = parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
 criterion = nn.CrossEntropyLoss().cuda()
-criterion_d  = nn.CrossEntropyLoss().cuda()
+#criterion_d  = nn.CrossEntropyLoss().cuda()
+criterion_d = nn.NLLLoss().cuda()
 parameters = list(net.parameters())
 for sstask in sstasks:
     parameters += list(sstask.head.parameters())
-#optimizer = optim.SGD(parameters, lr=args.lr, momentum=0.9, weight_decay=5e-4)
-optimizer = optim.Adam(parameters, lr=args.lr, betas=(0.5, 0.9), weight_decay=5e-4)
+optimizer = optim.SGD(parameters, lr=args.lr, momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [args.milestone_1, args.milestone_2], gamma=0.1, last_epoch=-1)
     
 all_epoch_stats = []
