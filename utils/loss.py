@@ -9,6 +9,6 @@ def loss_fn_kd(outputs, teacher_outputs, args):
     and student expects the input tensor to be log probabilities! See Issue #2
     """
     T = args.temperature
-    KD_loss = nn.KLDivLoss()(F.log_softmax(outputs/T, dim=1),
-                             F.softmax(teacher_outputs/T, dim=1)) * (T * T)
+    KD_loss = nn.KLDivLoss()(F.log_softmax(outputs/T, dim=-1),
+                             F.softmax(teacher_outputs/T, dim=-1)) * (T * T)
     return KD_loss
