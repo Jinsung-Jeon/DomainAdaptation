@@ -26,6 +26,7 @@ from utils.parse_tasks import parse_tasks
 from utils.SSHead import extractor_from_layer3
 from utils.plot_all_epoch_stats import plot_all_epoch_stats
 from utils.misc import *
+from utils.loss import loss_fn_kd
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--method', required=True)
@@ -49,6 +50,7 @@ parser.add_argument('--lr_flip', default=0.1, type=float)
 parser.add_argument('--domain', action='store_true')
 parser.add_argument('--lr_domain', default=0.1, type=float)
 ################################################################
+parser.add_argument('--temperature', default=3, type=int)
 parser.add_argument('--depth', default=26, type=int)
 parser.add_argument('--width', default=2, type=int)
 parser.add_argument('--outf', default='output/demo')
@@ -91,7 +93,7 @@ tg_te_loader = torchdata.DataLoader(tg_te_dataset, batch_size=args.batch_size, s
 sstasks = parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
 criterion = nn.CrossEntropyLoss().cuda()
 #criterion_d  = nn.CrossEntropyLoss().cuda()
-criterion_d = nn.KLDivLoss().cuda()
+criterion_d = loss_fn_kd().cuda()
 parameters = list(net.parameters())
 for sstask in sstasks:
     parameters += list(sstask.head.parameters())

@@ -55,9 +55,6 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
             sstask.train_batch()
         '''
 
-        def CXE(predicted, target):
-            return -(target * t.log(predicted)).sum(dim=1).mean()
-
         #source domain prepare
         sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
         domain_label = torch.zeros(len(sc_tr_inputs))
@@ -67,7 +64,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #source domain train
         outputs_cls, domain_output = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
-        loss_domain = CXE(domain_output, domain_label)
+        loss_domain = criterion_domain(domain_output, domain_label, args)
 
         #target domain prepare
         tg_tr_inputs = tg_tr_inputs.cuda()
@@ -76,7 +73,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
         #target train
         _, domain_output = net(tg_tr_inputs)
-        err_t_domain = CXE(domain_output, domain_label)
+        err_t_domain = criterion_domain(domain_output, domain_label, args)
 
         err = err_t_domain + loss_cls + loss_domain
 
