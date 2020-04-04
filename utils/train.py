@@ -66,7 +66,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #source domain train
         outputs_cls, domain_output = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
-        loss_domain = loss_fn_kd(domain_label, domain_output, args).cuda()
+        loss_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
 
         #target domain prepare
         tg_tr_inputs = tg_tr_inputs.cuda()
@@ -76,7 +76,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
         #target train
         _, domain_output = net(tg_tr_inputs)
-        err_t_domain = loss_fn_kd(domain_label,domain_output, args).cuda()
+        err_t_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
 
         err = err_t_domain + loss_cls + loss_domain
 
