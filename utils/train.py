@@ -99,7 +99,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #domain_label = domain_label.long().cuda()
         domain_label = domain.cuda()
 
-        loss_tgt = criterion_domain(domain_output, domain_label)
+        loss_tgt = loss_fn_kd(domain_output, domain_label)
         loss_tgt. backward()
         optimizer_cls.step()
 
