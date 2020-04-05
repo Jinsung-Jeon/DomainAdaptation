@@ -9,6 +9,7 @@ import torch
 from utils.get_mmd import get_mmd
 import numpy as np
 from utils.loss import loss_fn_kd
+import pdb
 
 def test(dataloader, model):
     model.eval()
@@ -62,7 +63,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #domain_label = domain_label.long().cuda()
         domain_label = domain_label.cuda()
         optimizer_cls.zero_grad()
-
+        pdb.set_trace()
         #source domain train
         outputs_cls, domain_output = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
