@@ -65,7 +65,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #domain_label = domain_label.long().cuda()
         domain_label = domain.long().cuda()
         optimizer_cls.zero_grad()
-        pdb.set_trace()
+        #pdb.set_trace()
         #source domain train
         outputs_cls, domain_output = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
