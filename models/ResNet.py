@@ -65,7 +65,7 @@ class ResNetCifar(nn.Module):
         self.avgpool = nn.AvgPool2d(8)
         self.fc = nn.Linear(64 * width, classes)
         #self.fc2 = nn.Linear(64 * width, 2)
-        self.fc2 = nn.Linear(classes, 2)
+        self.fc2 = nn.Linear(classesprin, 2)
 
         # Initialization
         for m in self.modules():
