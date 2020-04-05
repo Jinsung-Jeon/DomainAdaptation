@@ -63,7 +63,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         domain_labels = torch.ones(len(sc_tr_inputs))
         domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
-        domain_label = domain.cuda()
+        domain_label = domain.long().cuda()
         optimizer_cls.zero_grad()
         pdb.set_trace()
         #source domain train
@@ -77,7 +77,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         domain_labels = torch.zeros(len(tg_tr_inputs))
         domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
-        domain_label = domain.cuda()
+        domain_label = domain.long().cuda()
 
         #target train
         _, domain_output = net(tg_tr_inputs)
@@ -96,7 +96,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         domain_labels = torch.ones(len(tg_tr_inputs))
         domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
-        domain_label = domain.cuda()
+        domain_label = domain.long.cuda()
 
         loss_tgt = criterion_domain(domain_output, domain_label)
         loss_tgt. backward()
