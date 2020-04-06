@@ -21,7 +21,7 @@ import torch.utils.data as torchdata
 from models.ResNet import ResNetCifar as ResNet
 from dset_loaders.prepare_dataset import prepare_dataset
 
-from utils.train import train
+from utils.train import train, labeling, train_d
 from utils.parse_tasks import parse_tasks
 from utils.SSHead import extractor_from_layer3
 from utils.plot_all_epoch_stats import plot_all_epoch_stats
@@ -105,10 +105,13 @@ print('==> Running..')
 for epoch in range(1, args.nepoch+1):
     print('Source epoch %d/%d lr=%.3f' %(epoch, args.nepoch, optimizer.param_groups[0]['lr']))
     print('Error (%)\t\tmmd\ttarget test\tsource test\tunsupervised test')
-    
     scheduler.step()
     epoch_stats = train(args, net, ext, sstasks, 
         criterion, criterion_d, optimizer, scheduler, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader)
-    all_epoch_stats.append(epoch_stats)
+    #all_epoch_stats.append(epoch_stats)
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
-    plot_all_epoch_stats(all_epoch_stats, args.outf)
+    #plot_all_epoch_stats(all_epoch_stats, args.outf)
+
+    excerpt, pseudo_labels = labeling(args, net, tg_tr_loader)
+
+    epoch_stats = train_d(args, net, ext, sstasks, criterion, criterion_d, optimizer, scheduler, sc_tr_loader, sc_tr_dataset, tg_te_dataset, excerpt, pseudo_labels)
