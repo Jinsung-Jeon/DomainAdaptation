@@ -32,8 +32,9 @@ def print_nparams(model):
     print('numver of parameters: %d' % (nparams))
 
 def guess_pseudo_labels(out_1, threshold=0.9):
-    out_1 = F.softmax(out_1, dim=1)
-    pred_1, _ = torch.max(out_1, 1)
+
+    out_2 = F.softmax(out_1, dim=1)
+    pred_1, _ = torch.max(out_2, 1)
     filtered_idx = torch.nonzero(pred_1 > threshold)
     _, pred_idx = torch.max(out_1[filtered_idx, :], 1)
 
