@@ -130,9 +130,9 @@ def labeling(args, model, tg_tr_loader):
         with torch.no_grad():
             outputs_cls, outputs_domain = model(inputs)
         if batch_idx == 0:
-            out_F_1_total = outputs_cls
+            out_F_1_total = outputs_cls.cpu()
         else:
-            out_F_1_total = torch.cat([out_F_1_total, outputs_cls],0)
+            out_F_1_total = torch.cat([out_F_1_total, outputs_cls.cpu()],0)
     import pdb
     pdb.set_trace()
     excerpt, pseudo_labels = guess_pseudo_labels(out_F_1_total)

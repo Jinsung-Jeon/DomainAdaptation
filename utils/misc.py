@@ -31,7 +31,7 @@ def print_nparams(model):
     nparams = sum([param.nelement() for param in model.parameters()])
     print('numver of parameters: %d' % (nparams))
 
-def guess_pseudo_labels(out_1, threshold=0.9):
+def guess_pseudo_labels(out_1, threshold=0.4):
 
     out_2 = F.softmax(out_1, dim=1)
     pred_1, _ = torch.max(out_2, 1)
