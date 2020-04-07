@@ -35,7 +35,7 @@ def guess_pseudo_labels(out_1, threshold=0.4):
 
     out_2 = F.softmax(out_1, dim=1)
     pred_1, _ = torch.max(out_2, 1)
-    filtered_idx = torch.nonzero(pred_1 > threshold)
+    filtered_idx = torch.nonzero(pred_1 > threshold).squeeze()
     _, pred_idx = torch.max(out_1[filtered_idx, :], 1)
 
     pseudo_labels = pred_idx
