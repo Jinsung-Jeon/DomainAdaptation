@@ -10,7 +10,7 @@ from utils.get_mmd import get_mmd
 import numpy as np
 from utils.loss import loss_fn_kd
 import pdb
-from utils.misc import get_dummy, make_data_loader, get_inf_iterator
+from utils.misc import get_dummy, make_data_loader, get_inf_iterator, guess_pseudo_labels
 
 def test(dataloader, model):
     model.eval()
@@ -132,7 +132,8 @@ def labeling(args, model, tg_tr_loader):
             out_F_1_total = outputs_cls
         else:
             out_F_1_total = torch.cat([out_F_1_total, outputs_cls],0)
-
+    import pdb
+    pdb.set_trace()
     excerpt, pseudo_labels = guess_pseudo_labels(out_F_1_total)
 
     return excerpt, pseudo_labels
