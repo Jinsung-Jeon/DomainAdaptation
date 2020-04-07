@@ -11,6 +11,7 @@ import numpy as np
 from utils.loss import loss_fn_kd
 import pdb
 from utils.misc import get_dummy, make_data_loader, get_inf_iterator, guess_pseudo_labels
+from torch.utils.data import ConcatDataset
 
 def test(dataloader, model):
     model.eval()
