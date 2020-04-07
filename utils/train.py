@@ -133,13 +133,13 @@ def labeling(args, model, tg_tr_loader):
             out_F_1_total = outputs_cls.cpu()
         else:
             out_F_1_total = torch.cat([out_F_1_total, outputs_cls.cpu()],0)
-    import pdb
-    pdb.set_trace()
     excerpt, pseudo_labels = guess_pseudo_labels(out_F_1_total)
 
     return excerpt, pseudo_labels
 
 def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer, scheduler, sc_tr_loader, sc_tr_dataset, tg_te_dataset, excerpt, pseudo_labels):
+    import pdb
+    pdb.set_trace()
     target_dataset_labelled = get_dummy(tg_te_dataset, excerpt, pseudo_labels, get_dataset=True)
     merged_dataset = ConcatDataset([sc_tr_dataset, target_dataset_labelled])
 

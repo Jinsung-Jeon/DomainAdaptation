@@ -65,7 +65,6 @@ def get_dummy(original_dataset, excerpt, pseudo_labels, get_dataset=False, batch
         return dummy_dataset
     else:
         dummy_data_loader = torch.utils.data.DataLoader(dataset=dummy_dataset, batch_size=256, shuffle=True)
-
         return dummy_data_loader
 
 def make_data_loader(dataset, batch_size=256,shuffle=True, sampler=None):
