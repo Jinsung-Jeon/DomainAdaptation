@@ -47,71 +47,65 @@ def test_d(dataloader, model):
 
 def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader):
     net.train()
-    '''
     for sstask in sstasks:
         sstask.head.train()
         sstask.scheduler.step()
-    '''
     epoch_stats = []
     for batch_idx, ((sc_tr_inputs, sc_tr_labels),(tg_tr_inputs, _)) in enumerate(zip(sc_tr_loader,tg_tr_loader)):
-        '''
         for sstask in sstasks:
             sstask.train_batch()
-        '''
         #source domain prepare
         sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
-        domain_label = torch.zeros(len(sc_tr_inputs))
-        domain_labels = torch.ones(len(sc_tr_inputs))
-        domain = torch.stack([domain_label, domain_labels], 1)
+        #domain_label = torch.zeros(len(sc_tr_inputs))
+        #domain_labels = torch.ones(len(sc_tr_inputs))
+        #domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
-        domain_label = domain.cuda()
+        #domain_label = domain.cuda()
         optimizer_cls.zero_grad()
 
         #pdb.set_trace()
         #source domain train
         outputs_cls, domain_output = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
-        loss_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
-
+        #loss_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
+        loss_cls.backward()
         #target domain prepare
-        tg_tr_inputs = tg_tr_inputs.cuda()
-        domain_label = torch.ones(len(tg_tr_inputs))
-        domain_labels = torch.zeros(len(tg_tr_inputs))
-        domain = torch.stack([domain_label, domain_labels], 1)
+        #tg_tr_inputs = tg_tr_inputs.cuda()
+        #domain_label = torch.ones(len(tg_tr_inputs))
+        #domain_labels = torch.zeros(len(tg_tr_inputs))
+        #domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
-        domain_label = domain.cuda()
+        #domain_label = domain.cuda()
 
         #target train
-        _, domain_output = net(tg_tr_inputs)
-        err_t_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
+        #_, domain_output = net(tg_tr_inputs)
+        #err_t_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
 
-        err = err_t_domain + loss_cls + loss_domain
+        #err = err_t_domain + loss_cls + loss_domain
 
-        err.backward()
+        #err.backward()
         optimizer_cls.step()
 
-        optimizer_cls.zero_grad()
-        tg_tr_inputs = tg_tr_inputs.cuda()
-        _, domain_output = net(tg_tr_inputs)
+        #optimizer_cls.zero_grad()
+        #tg_tr_inputs = tg_tr_inputs.cuda()
+        #_, domain_output = net(tg_tr_inputs)
 
-        domain_label = torch.zeros(len(tg_tr_inputs))
-        domain_labels = torch.ones(len(tg_tr_inputs))
-        domain = torch.stack([domain_label, domain_labels], 1)
+        #domain_label = torch.zeros(len(tg_tr_inputs))
+        #domain_labels = torch.ones(len(tg_tr_inputs))
+        #domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
-        domain_label = domain.cuda()
+        #domain_label = domain.cuda()
 
-        loss_tgt = loss_fn_kd(domain_output, domain_label, args).cuda()
-        loss_tgt. backward()
-        optimizer_cls.step()
-
+        #loss_tgt = loss_fn_kd(domain_output, domain_label, args).cuda()
+        #loss_tgt. backward()
+        #optimizer_cls.step()
         if batch_idx % args.num_batches_per_test == 0:
-            sc_te_err, sc_domain_err = test(sc_te_loader, net)
-            tg_te_err, tg_domain_err = test(tg_te_loader, net)
+            sc_te_err, sc_domain_err = test_d(sc_te_loader, net)
+            tg_te_err, tg_domain_err = test_d(tg_te_loader, net)
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
-            
             us_te_err_av = []
             for sstask in sstasks:
-                err_av, err_sc, err_tg = sstask.test()
+                err_av, err_sc, err_tg = sstask.test_d()
                 us_te_err_av.append(err_av)
             epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, us_te_err_av))
             display = ('Iteration %d/%d:' %(batch_idx, len(sc_tr_loader))).ljust(24)
@@ -144,7 +138,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
     merged_dataset = ConcatDataset([sc_tr_dataset, target_dataset_labelled])
 
     net.train()
-
+    print(len(input_z))
     merged_dataloader = make_data_loader(merged_dataset)
     target_dataloader_labelled = get_inf_iterator(make_data_loader(target_dataset_labelled))
     epoch_stats = []
@@ -153,18 +147,18 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
 
         images = make_variable(images)
         labels = make_variable(labels)
-        images_tgt = make_variable(images_tgt)
-        labels_tgt = make_variable(labels_tgt)
+        #images_tgt = make_variable(images_tgt)
+        #labels_tgt = make_variable(labels_tgt)
 
         optimizer_cls.zero_grad()
 
         output_cls, _ = net(images)
         output_cls_tgt, _ = net(images_tgt)
         loss_cls = criterion_cls(output_cls, labels)
-        loss_domain = criterion_cls(output_cls_tgt, labels_tgt)
-
-        err = loss_cls + loss_domain
-        err.backward()
+        #loss_domain = criterion_cls(output_cls_tgt, labels_tgt)
+        loss_cls.backward()
+        #err = loss_cls + loss_domain
+        #err.backward()
         optimizer_cls.step()
 
         if batch_idx % args.num_batches_per_test == 0:
