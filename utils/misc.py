@@ -49,7 +49,7 @@ class DummyDataset(data.Dataset):
         assert len(excerpt) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
         self.dataset = original_dataset
         self.excerpt = excerpt
-        self.pseudo_lables = pseudo_labels
+        self.pseudo_labels = pseudo_labels
 
     def __getitem__(self, index):
         images, _ = self.dataset[self.excerpt[index]]
