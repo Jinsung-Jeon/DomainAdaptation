@@ -31,8 +31,7 @@ def print_nparams(model):
     nparams = sum([param.nelement() for param in model.parameters()])
     print('numver of parameters: %d' % (nparams))
 
-def guess_pseudo_labels(out_1, threshold=0.4):
-
+def guess_pseudo_labels(out_1, inputs_idx, threshold=0.4):
     out_2 = F.softmax(out_1, dim=1)
     pred_1, _ = torch.max(out_2, 1)
     filtered_idx = torch.nonzero(pred_1 > threshold).squeeze()
@@ -40,26 +39,29 @@ def guess_pseudo_labels(out_1, threshold=0.4):
 
     pseudo_labels = pred_idx
     excerpt = out_1[filtered_idx]
+    inputs = inputs_idx[filtered_idx]
 
-    return excerpt, pseudo_labels
+    return excerpt, pseudo_labels, inputs
 
 class DummyDataset(data.Dataset):
-    def __init__(self, original_dataset, excerpt, pseudo_labels):
+    def __init__(self, original_dataset, excerpt, pseudo_labels, input_z):
         super(DummyDataset, self).__init__()
         assert len(excerpt) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
+        assert len(input_z) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
         self.dataset = original_dataset
         self.excerpt = excerpt
         self.pseudo_labels = pseudo_labels
+        self.input_z = input_z
 
     def __getitem__(self, index):
         #images, _ = self.dataset[self.excerpt[index]]
-        return self.excerpt[index], self.pseudo_labels[index]
+        return self.input_z[index], self.pseudo_labels[index]
 
     def __len__(self):
         return len(self.excerpt)
 
-def get_dummy(original_dataset, excerpt, pseudo_labels, get_dataset=False, batch_size=256):
-    dummy_dataset = DummyDataset(original_dataset, excerpt, pseudo_labels)
+def get_dummy(original_dataset, excerpt, pseudo_labels, input_z, get_dataset=False, batch_size=256):
+    dummy_dataset = DummyDataset(original_dataset, excerpt, pseudo_labels, input_z)
 
     if get_dataset:
         return dummy_dataset

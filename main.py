@@ -114,10 +114,10 @@ for epoch in range(1, args.nepoch+1):
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
     #plot_all_epoch_stats(all_epoch_stats, args.outf)
     pdb.set_trace()
-    excerpt, pseudo_labels = labeling(args, net, tg_tr_loader)
+    excerpt, pseudo_labels, input_z = labeling(args, net, tg_tr_loader)
     import pdb
     pdb.set_trace()
-    epoch_stats = train_d(args, net, ext, sstasks, criterion, criterion_d, optimizer, scheduler, sc_tr_loader, sc_tr_dataset, tg_te_dataset, excerpt, pseudo_labels)
+    epoch_stats = train_d(args, net, ext, sstasks, criterion, criterion_d, optimizer, scheduler, sc_tr_loader, sc_tr_dataset, tg_te_dataset, excerpt, pseudo_labels, input_z)
     all_epoch_stats.append(epoch_stats)
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
     plot_all_epoch_stats(all_epoch_stats, args.outf)
