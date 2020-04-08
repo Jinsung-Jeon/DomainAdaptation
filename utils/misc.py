@@ -51,9 +51,9 @@ class DummyDataset(data.Dataset):
         self.excerpt = excerpt
         self.pseudo_labels = pseudo_labels
 
-    def __getitem__(self, index):
-        images, _ = self.dataset[self.excerpt[index]]
-        return images, self.pseudo_labels[index]
+    def __getitem__(self):
+        #images, _ = self.dataset[self.excerpt[index]]
+        return self.excerpt, self.pseudo_labels[index]
 
     def __len__(self):
         return len(self.excerpt)
