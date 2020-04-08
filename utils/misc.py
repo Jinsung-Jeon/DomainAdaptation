@@ -83,3 +83,10 @@ def get_inf_iterator(data_loader):
     while True:
         for images, labels in data_loader:
             yield (images, labels)
+
+def make_variable(tensor, volatile=False):
+    """Convert Tensor to Variable."""
+    if torch.cuda.is_available():
+        tensor = tensor.cuda()
+    return Variable(tensor, volatile=volatile)
+

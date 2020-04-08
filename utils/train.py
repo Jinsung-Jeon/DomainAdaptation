@@ -153,10 +153,10 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer, sche
     for batch_idx, (images, labels) in enumerate(merged_dataloader):
         images_tgt, labels_tgt = next(target_dataloader_labelled)
 
-        images = make_variable(images).cuda()
-        labels = make_variable(labels).cuda()
-        images_tgt = make_variable(images_tgt).cuda()
-        labels_tgt = make_variable(labels_tgt).cuda()
+        images = make_variable(images)
+        labels = make_variable(labels)
+        images_tgt = make_variable(images_tgt)
+        labels_tgt = make_variable(labels_tgt)
 
         optimizer_cls.zero_grad()
 
