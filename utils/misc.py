@@ -9,6 +9,7 @@ import os
 import torch
 import torch.utils.data as data
 import torch.nn.functional as F
+from torch.autograd import Variable
 
 def write_to_text(name, content):
     with open(name, 'w') as text_file:
