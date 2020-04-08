@@ -62,8 +62,6 @@ class DummyDataset(data.Dataset):
         return len(self.excerpt)
 
 def get_dummy(original_dataset, excerpt, pseudo_labels, input_z, get_dataset=False, batch_size=256):
-    import pdb
-    pdb.set_trace()
     dummy_dataset = DummyDataset(original_dataset, excerpt, pseudo_labels, input_z)
     if get_dataset:
         return dummy_dataset
