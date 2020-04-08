@@ -53,7 +53,7 @@ class DummyDataset(data.Dataset):
 
     def __getitem__(self, index):
         images, _ = self.dataset[self.excerpt[index]]
-        return images, self.pseudo_lables[index]
+        return images, self.pseudo_labels[index]
 
     def __len__(self):
         return len(self.excerpt)
