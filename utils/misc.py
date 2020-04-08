@@ -63,7 +63,6 @@ class DummyDataset(data.Dataset):
 
 def get_dummy(original_dataset, excerpt, pseudo_labels, input_z, get_dataset=False, batch_size=256):
     dummy_dataset = DummyDataset(original_dataset, excerpt, pseudo_labels, input_z)
-
     if get_dataset:
         return dummy_dataset
     else:
