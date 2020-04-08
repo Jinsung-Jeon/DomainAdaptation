@@ -162,7 +162,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
 
         output_cls, _ = net(images)
         output_cls_tgt, _ = net(images_tgt)
-        loss_cls = criterion_cls(outputs_cls, labels)
+        loss_cls = criterion_cls(output_cls, labels)
         loss_domain = criterion_cls(output_cls_tgt, labels_tgt)
 
         err = loss_cls + loss_domain
