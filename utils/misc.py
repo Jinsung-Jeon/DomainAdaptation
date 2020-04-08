@@ -35,8 +35,6 @@ def print_nparams(model):
 def guess_pseudo_labels(out_1, inputs_idx, threshold=0.4):
     out_2 = F.softmax(out_1, dim=1)
     pred_1, _ = torch.max(out_2, 1)
-    import pdb
-    pdb.set_trace()
     filtered_idx = torch.nonzero(pred_1 > threshold).squeeze()
     _, pred_idx = torch.max(out_1[filtered_idx, :], 1)
 
