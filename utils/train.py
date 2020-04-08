@@ -10,7 +10,7 @@ from utils.get_mmd import get_mmd
 import numpy as np
 from utils.loss import loss_fn_kd
 import pdb
-from utils.misc import get_dummy, make_data_loader, get_inf_iterator, guess_pseudo_labels
+from utils.misc import get_dummy, make_data_loader, get_inf_iterator, guess_pseudo_labels, make_variable
 from torch.utils.data import ConcatDataset
 
 def test(dataloader, model):
