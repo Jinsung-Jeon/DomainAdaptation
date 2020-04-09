@@ -107,7 +107,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
             tg_te_err = test_d(tg_te_loader, net)
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
 
-            s_te_err_av = []
+            us_te_err_av = []
             for sstask in sstasks:
                 err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
