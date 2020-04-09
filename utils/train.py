@@ -112,12 +112,11 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
                 err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
             epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
-            display = ('Iteration %d/%d:' %(batch_idx, len(sc_tr_loader))).ljust(30)
-            display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' %(mmd, tg_te_err*100, sc_te_err*100, loss_cls)
+            display = ('Iteration %d/%d:' %(batch_idx, len(sc_tr_loader))).ljust(45)
+            display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' %(mmd, tg_te_err*100, sc_te_err*100, loss_cls*100)
             for err in us_te_err_av:
                 display += '%.2f\t'%(err*100)
             print(display)
-    print(err)
     return epoch_stats
 
 def labeling(args, model, tg_tr_loader):
@@ -142,7 +141,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
     merged_dataset = ConcatDataset([sc_tr_dataset, target_dataset_labelled])
 
     net.train()
-    print(len(input_z))
+    print("pseudo label %.2f" %len(input_z))
     merged_dataloader = make_data_loader(merged_dataset)
     target_dataloader_labelled = get_inf_iterator(make_data_loader(target_dataset_labelled))
     epoch_stats = []
@@ -176,7 +175,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
                 us_te_err_av.append(err_av)
             epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
             display = ('Iteration %d/%d:' % (batch_idx, len(sc_tr_loader))).ljust(30)
-            display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' % (mmd, tg_te_err * 100, sc_te_err * 100, loss_cls)
+            display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' % (mmd, tg_te_err * 100, sc_te_err * 100, loss_cls*100)
             for err in us_te_err_av:
                 display += '%.2f\t' % (err * 100)
             print(display)

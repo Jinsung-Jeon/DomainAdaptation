@@ -106,7 +106,7 @@ all_epoch_stats = []
 print('==> Running..')
 for epoch in range(1, args.nepoch+1):
     print('Source epoch %d/%d lr=%.3f' %(epoch, args.nepoch, optimizer.param_groups[0]['lr']))
-    print('Error (%)\t\tmmd\ttarget test\tsource test\tunsupervised test')
+    print('Error (%)\t\tmmd\ttarget test\tsource test\tloss\tunsupervised test')
     scheduler.step()
     epoch_stats = train(args, net, ext, sstasks, 
         criterion, criterion_d, optimizer, scheduler, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader)
