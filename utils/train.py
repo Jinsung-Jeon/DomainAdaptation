@@ -38,7 +38,7 @@ def test_d(dataloader, model):
     for batch_idx, (inputs, labels) in enumerate(dataloader):
         inputs, labels = inputs.cuda(), labels.cuda()
         with torch.no_grad():
-            outputs = model(inputs)
+            outputs, outputs_domain = model(inputs)
         _, predicted = outputs.max(1)
         total += labels.size(0)
         correct += predicted.eq(labels).sum().item()
