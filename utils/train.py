@@ -104,10 +104,11 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #optimizer_cls.step()
 
         if batch_idx % args.num_batches_per_test == 0:
-            sc_te_err, sc_domain_err = test_d(sc_te_loader, net)
-            tg_te_err, tg_domain_err = test_d(tg_te_loader, net)
+            sc_te_err = test_d(sc_te_loader, net)
+            tg_te_err = test_d(tg_te_loader, net)
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
-            us_te_err_av = []
+
+            s_te_err_av = []
             for sstask in sstasks:
                 err_av, err_sc, err_tg = sstask.test_d()
                 us_te_err_av.append(err_av)
@@ -166,8 +167,8 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
         optimizer_cls.step()
 
         if batch_idx % args.num_batches_per_test == 0:
-            sc_te_err = test(sc_te_loader, net)
-            tg_te_err = test(tg_te_loader, net)
+            sc_te_err = test_d(sc_te_loader, net)
+            tg_te_err = test_d(tg_te_loader, net)
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
 
             us_te_err_av = []
