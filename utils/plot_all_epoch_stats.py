@@ -34,6 +34,7 @@ def parse_all_epoch_stats(all_epoch_stats, prune=True):
 	sc_te_err = []
 	us_te_err = []
 	mmd = []
+	err = []
 
 	for epoch, epoch_stats in enumerate(all_epoch_stats):
 		for stats in epoch_stats:
@@ -42,6 +43,7 @@ def parse_all_epoch_stats(all_epoch_stats, prune=True):
 			sc_te_err.append(stats[4])
 			us_te_err.append(stats[5])
 			xs.append(base_iter_count + stats[0])
+			err.append(stats[6])
 		base_iter_count += stats[1]
 		ticks.append(base_iter_count)
 		labels.append(epoch+1)
@@ -49,18 +51,19 @@ def parse_all_epoch_stats(all_epoch_stats, prune=True):
 	if prune:
 		ticks, labels = prune_ticks_labels(ticks, labels)
 	us_te_err = np.asarray(us_te_err)
-	return ticks, labels, xs, tg_te_err, sc_te_err, us_te_err, mmd
+	return ticks, labels, xs, tg_te_err, sc_te_err, us_te_err, mmd, err
 
 def plot_all_epoch_stats(all_epoch_stats, outf):
 	import matplotlib.pyplot as plt
-	ticks, labels, xs, tg_te_err, sc_te_err, us_te_err, mmd = parse_all_epoch_stats(all_epoch_stats)
+	ticks, labels, xs, tg_te_err, sc_te_err, us_te_err, mmd, err = parse_all_epoch_stats(all_epoch_stats)
 
 	mmd = np.asarray(mmd)
 	plt.plot(xs, mmd / np.max(mmd)*100, color='k', label='normalized mmd')
 	plt.plot(xs, np.asarray(tg_te_err)*100, color='r', label='target')
 	plt.plot(xs, np.asarray(sc_te_err)*100, color='b', label='source')
+	plt.plot(xs, np.asarray(err) * 100, color='y', label='loss')
 
-	colors = ['g', 'm', 'c']
+	colors = ['g', 'm', 'c', 'y']
 	for i in range(us_te_err.shape[1]):
 		plt.plot(xs, np.asarray(us_te_err[:,i])*100, color=colors[i], label='self-sup %d' %(i+1))
 

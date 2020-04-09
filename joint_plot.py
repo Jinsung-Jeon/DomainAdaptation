@@ -16,7 +16,7 @@ from utils.get_mmd import mmd_select_naive, mmd_select_scale
 
 try:
 	all_epoch_stats = torch.load('output/%s/loss.pth' %(sys.argv[1]))
-	_, _, _, tg_te_err, _, _, _ = parse_all_epoch_stats(all_epoch_stats)
+	_, _, _, tg_te_err, _, _, _, err = parse_all_epoch_stats(all_epoch_stats)
 	print(sys.argv[1] + '\t source only accuracy: %.2f' %((1-tg_te_err[-1])*100))
 except:
 	print('File does not exist: %s' %(sys.argv[1]))
@@ -53,7 +53,7 @@ for (fname, label, color) in zip(fnames, labels, colors):
 	except:
 		print('File does not exist: %s' %(fname))
 		continue
-	ticks, epochs, xs, tg_te_err, sc_te_err, _, mmd = parse_all_epoch_stats(all_epoch_stats)
+	ticks, epochs, xs, tg_te_err, sc_te_err, _, mmd, err  = parse_all_epoch_stats(all_epoch_stats)
 	mss_error = tg_te_err[mmd_select_scale(mmd, sc_te_err)]
 
 	print(fname + '\t best accuracy: %.2f' %((1-np.min(tg_te_err))*100))
