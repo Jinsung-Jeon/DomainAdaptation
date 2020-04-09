@@ -179,5 +179,4 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
             for err in us_te_err_av:
                 display += '%.2f\t' % (err * 100)
             print(display)
-    print(err)
     return epoch_stats
