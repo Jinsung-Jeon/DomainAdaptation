@@ -21,15 +21,16 @@ def test(dataloader, model):
     for batch_idx, (inputs, labels) in enumerate(dataloader):
         inputs, labels = inputs.cuda(), labels.cuda()
         with torch.no_grad():
-            outputs_cls, outputs_domain = model(inputs)
+            outputs_cls = model(inputs)
+            #outputs_cls, outputs_domain = model(inputs)
         _, predicted_cls = outputs_cls.max(1)
-        _, predicted_domain = outputs_domain.max(1)
+        #_, predicted_domain = outputs_domain.max(1)
         total += labels.size(0)
         correct_cls += predicted_cls.eq(labels).sum().item()
-        correct_domain += predicted_domain.eq(1).sum().item()
+        #correct_domain += predicted_domain.eq(1).sum().item()
     model.train()
     
-    return 1 - correct_cls/total, 1 - correct_domain/total
+    return 1 - correct_cls/total#, 1 - correct_domain/total
 
 def test_d(dataloader, model):
     model.eval()
