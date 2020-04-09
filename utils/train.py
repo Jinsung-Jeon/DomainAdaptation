@@ -52,8 +52,9 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
     for sstask in sstasks:
         sstask.head.train()
         sstask.scheduler.step()
+
     epoch_stats = []
-    for batch_idx, ((sc_tr_inputs, sc_tr_labels),(tg_tr_inputs, _)) in enumerate(zip(sc_tr_loader,tg_tr_loader)):
+    for batch_idx, ((sc_tr_inputs, sc_tr_labels),(tg_tr_inputs, tg_tr_labels)) in enumerate(zip(sc_tr_loader,tg_tr_loader)):
         for sstask in sstasks:
             sstask.train_batch()
         #source domain prepare
@@ -101,6 +102,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #loss_tgt = loss_fn_kd(domain_output, domain_label, args).cuda()
         #loss_tgt. backward()
         #optimizer_cls.step()
+
         if batch_idx % args.num_batches_per_test == 0:
             sc_te_err, sc_domain_err = test_d(sc_te_loader, net)
             tg_te_err, tg_domain_err = test_d(tg_te_loader, net)
@@ -164,8 +166,8 @@ def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, 
         optimizer_cls.step()
 
         if batch_idx % args.num_batches_per_test == 0:
-            sc_te_err, sc_domain_err = test(sc_te_loader, net)
-            tg_te_err, tg_domain_err = test(tg_te_loader, net)
+            sc_te_err = test(sc_te_loader, net)
+            tg_te_err = test(tg_te_loader, net)
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
 
             us_te_err_av = []
