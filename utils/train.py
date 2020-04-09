@@ -108,7 +108,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
 
             s_te_err_av = []
             for sstask in sstasks:
-                err_av, err_sc, err_tg = sstask.test_d()
+                err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
             epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
             display = ('Iteration %d/%d:' %(batch_idx, len(sc_tr_loader))).ljust(30)
