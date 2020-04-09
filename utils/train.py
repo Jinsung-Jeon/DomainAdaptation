@@ -35,8 +35,6 @@ def test_d(dataloader, model):
     model.eval()
     correct = 0
     total = 0
-    import pdb
-    pdb.set_trace()
     for batch_idx, (inputs, labels) in enumerate(dataloader):
         inputs, labels = inputs.cuda(), labels.cuda()
         with torch.no_grad():
