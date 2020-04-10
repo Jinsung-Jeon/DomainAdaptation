@@ -32,7 +32,7 @@ def print_nparams(model):
     nparams = sum([param.nelement() for param in model.parameters()])
     print('numver of parameters: %d' % (nparams))
 
-def guess_pseudo_labels(out_1, inputs_idx, threshold=0.4):
+def guess_pseudo_labels(out_1, inputs_idx, threshold=0.5):
     out_2 = F.softmax(out_1, dim=1)
     pred_1, _ = torch.max(out_2, 1)
     filtered_idx = torch.nonzero(pred_1 > threshold).squeeze()
@@ -51,7 +51,7 @@ class DummyDataset(data.Dataset):
         assert len(input_z) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
         self.dataset = original_dataset
         self.excerpt = excerpt
-        self.pseudo_labels = pseudo_labels.numpy()
+        self.pseudo_labels = pseudo_labels
         self.input_z = input_z
 
     def __getitem__(self, index):
