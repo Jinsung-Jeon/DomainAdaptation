@@ -25,6 +25,23 @@ def prepare_dataset(dataset_name, image_size, channels=3, path='/jinsung/DA/data
 		                            transforms.ToTensor(),
 		                            transforms.Normalize((0.437, 0.4437, 0.4728), (0.1980, 0.2010, 0.1970))
 		                       ]))
+    elif dataset_name == 'svhn':
+        tr_dataset = torchvision.datasets.SVHN(root=path + '/svhn', split='train', download=True,
+                                               transform=transforms.Compose([
+                                                   transforms.Resize(image_size),
+                                                   transforms.ToTensor(),
+                                                   transforms.Normalize((0.437, 0.4437, 0.4728),
+                                                                        (0.1980, 0.2010, 0.1970))
+                                               ]))
+        print('SVHN basic set size: %d' % (len(tr_dataset)))
+        te_dataset = torchvision.datasets.SVHN(root=path + '/svhn', split='test', download=True,
+                                               transform=transforms.Compose([
+                                                   transforms.Resize(image_size),
+                                                   transforms.ToTensor(),
+                                                   transforms.Normalize((0.437, 0.4437, 0.4728),
+                                                                        (0.1980, 0.2010, 0.1970))
+                                               ]))
+
     elif dataset_name == 'mnist':
         tr_dataset = torchvision.datasets.MNIST(path+'/mnist_pytorch', download=True, train=True, transform=transforms.Compose([
 													transforms.Resize(image_size),
