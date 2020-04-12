@@ -75,13 +75,12 @@ else:
 
 
 print('==> Building model..')
-if(args.method=='self-supervision_Adapt'):
-    net = ResNet(args.depth, args.width, classes=classes, channels=channels)
-    ext = extractor_from_layer3(net)
-    net = torch.nn.DataParallel(net)
-    ext = torch.nn.DataParallel(ext)
-    net.cuda()
-    ext.cuda()
+net = ResNet(args.depth, args.width, classes=classes, channels=channels)
+ext = extractor_from_layer3(net)
+net = torch.nn.DataParallel(net)
+ext = torch.nn.DataParallel(ext)
+net.cuda()
+ext.cuda()
     
 print('==> Preparing datasets..')
 sc_tr_dataset, sc_te_dataset = prepare_dataset(args.source, image_size, channels, path=args.data_root)
@@ -94,7 +93,6 @@ tg_te_loader = torchdata.DataLoader(tg_te_dataset, batch_size=args.batch_size, s
 
 sstasks = parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
 criterion = nn.CrossEntropyLoss().cuda()
-criterion_d  = nn.CrossEntropyLoss().cuda()
 
 parameters = list(net.parameters())
 for sstask in sstasks:
@@ -103,18 +101,18 @@ optimizer = optim.SGD(parameters, lr=args.lr, momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [args.milestone_1, args.milestone_2], gamma=0.1, last_epoch=-1)
     
 all_epoch_stats = []
+
 print('==> Running..')
 for epoch in range(1, args.nepoch+1):
     print('Source epoch %d/%d lr=%.3f' %(epoch, args.nepoch, optimizer.param_groups[0]['lr']))
     print('Error (%)\t\tmmd\ttarget test\tsource test\tloss\tunsupervised test')
-    scheduler.step()
     epoch_stats = train(args, net, ext, sstasks, 
-        criterion, criterion_d, optimizer, scheduler, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader)
+        criterion, optimizer, scheduler, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader)
     #all_epoch_stats.append(epoch_stats)
     #plot_all_epoch_stats(all_epoch_stats, args.outf)
     if args.method == 'self-supervision_Adapt':
         excerpt, pseudo_labels, input_z = labeling(args, net, tg_tr_loader)
         epoch_stats = train_d(args, net, ext, sstasks, criterion, optimizer, sc_tr_loader, sc_tr_dataset, sc_te_loader, tg_te_dataset, tg_te_loader, excerpt, pseudo_labels, input_z)
-        all_epoch_stats.append(epoch_stats)
+    all_epoch_stats.append(epoch_stats)
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
     plot_all_epoch_stats(all_epoch_stats, args.outf)

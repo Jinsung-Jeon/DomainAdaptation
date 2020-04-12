@@ -46,14 +46,14 @@ def test_d(dataloader, model):
     model.train()
     return 1 - correct / total
 
-def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader):
+def train(args, net, ext, sstasks, criterion_cls, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader):
     net.train()
     for sstask in sstasks:
         sstask.head.train()
         sstask.scheduler.step()
 
     epoch_stats = []
-    for batch_idx, ((sc_tr_inputs, sc_tr_labels),(tg_tr_inputs, tg_tr_labels)) in enumerate(zip(sc_tr_loader,tg_tr_loader)):
+    for batch_idx, (sc_tr_inputs, sc_tr_labels) in enumerate(sc_tr_loader):
         for sstask in sstasks:
             sstask.train_batch()
         #source domain prepare
