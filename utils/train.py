@@ -4,7 +4,7 @@ Created on Fri Feb  7 17:43:06 2020
 
 @author: Jinsung
 """
-
+import random
 import torch
 from utils.get_mmd import get_mmd
 import numpy as np
@@ -136,12 +136,17 @@ def labeling(args, model, tg_tr_loader):
 
     return excerpt, pseudo_labels, inputs_z
 
-def train_d(args, net, ext, sstasks, criterion_cls, criterion_d, optimizer_cls, scheduler, sc_tr_loader, sc_tr_dataset,sc_te_loader, tg_tr_dataset, tg_te_loader,excerpt, pseudo_labels, input_z):
+def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader, sc_tr_dataset,sc_te_loader, tg_tr_dataset, tg_te_loader,excerpt, pseudo_labels, input_z):
     target_dataset_labelled = get_dummy(tg_tr_dataset, excerpt, pseudo_labels, input_z, get_dataset=True)
-    merged_dataset = ConcatDataset([sc_tr_dataset, target_dataset_labelled])
+    import pdb
+    pdb.set_trace()
+    sc_tr_dataset_n = random.sample(sc_tr_dataset, len(input_z))
+
+    merged_dataset = ConcatDataset([sc_tr_dataset_n, target_dataset_labelled])
 
     net.train()
     print("pseudo label %.2f" %len(input_z))
+
     merged_dataloader = make_data_loader(merged_dataset)
     target_dataloader_labelled = get_inf_iterator(make_data_loader(target_dataset_labelled))
     epoch_stats = []
