@@ -101,7 +101,7 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #loss_tgt = loss_fn_kd(domain_output, domain_label, args).cuda()
         #loss_tgt. backward()
         #optimizer_cls.step()
-        if batch_idx == len(sc_tr_loader):
+        if batch_idx == len(sc_tr_loader)-1:
         #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
             tg_te_err = test_d(tg_te_loader, net)
@@ -166,7 +166,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
         #err.backward()
         optimizer_cls.step()
 
-        if batch_idx == len(merged_dataloader):
+        if batch_idx == len(merged_dataloader)-1:
         #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
             tg_te_err = test_d(tg_te_loader, net)

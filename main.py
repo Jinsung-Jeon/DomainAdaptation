@@ -113,8 +113,9 @@ for epoch in range(1, args.nepoch+1):
     #all_epoch_stats.append(epoch_stats)
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
     #plot_all_epoch_stats(all_epoch_stats, args.outf)
-    excerpt, pseudo_labels, input_z = labeling(args, net, tg_tr_loader)
-    epoch_stats = train_d(args, net, ext, sstasks, criterion, optimizer, sc_tr_loader, sc_tr_dataset, sc_te_loader, tg_te_dataset, tg_te_loader, excerpt, pseudo_labels, input_z)
-    all_epoch_stats.append(epoch_stats)
+    if args.method == 'self-supervision_Adap':
+        excerpt, pseudo_labels, input_z = labeling(args, net, tg_tr_loader)
+        epoch_stats = train_d(args, net, ext, sstasks, criterion, optimizer, sc_tr_loader, sc_tr_dataset, sc_te_loader, tg_te_dataset, tg_te_loader, excerpt, pseudo_labels, input_z)
+        all_epoch_stats.append(epoch_stats)
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
     plot_all_epoch_stats(all_epoch_stats, args.outf)
