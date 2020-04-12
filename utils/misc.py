@@ -45,8 +45,8 @@ def guess_pseudo_labels(args,out_1, inputs_idx):
 
     return excerpt, pseudo_labels, inputs
 
-class DummyDataset(args, data.Dataset):
-    def __init__(self, original_dataset, excerpt, pseudo_labels, input_z):
+class DummyDataset(data.Dataset):
+    def __init__(self, args, original_dataset, excerpt, pseudo_labels, input_z):
         super(DummyDataset, self).__init__()
         assert len(excerpt) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
         assert len(input_z) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
