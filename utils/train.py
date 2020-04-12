@@ -101,8 +101,8 @@ def train(args, net, ext, sstasks, criterion_cls, criterion_domain, optimizer_cl
         #loss_tgt = loss_fn_kd(domain_output, domain_label, args).cuda()
         #loss_tgt. backward()
         #optimizer_cls.step()
-
-        if batch_idx % args.num_batches_per_test == 0:
+        if batch_idx == len(sc_tr_loader):
+        #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
             tg_te_err = test_d(tg_te_loader, net)
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
@@ -138,11 +138,8 @@ def labeling(args, model, tg_tr_loader):
 
 def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader, sc_tr_dataset,sc_te_loader, tg_tr_dataset, tg_te_loader,excerpt, pseudo_labels, input_z):
     target_dataset_labelled = get_dummy(tg_tr_dataset, excerpt, pseudo_labels, input_z, get_dataset=True)
-    import pdb
-    pdb.set_trace()
-    sc_tr_dataset_n = random.sample(list(sc_tr_dataset), len(input_z))
-
-    merged_dataset = ConcatDataset([sc_tr_dataset_n, target_dataset_labelled])
+    sc_tr_dataset = random.sample(list(sc_tr_dataset), len(input_z))
+    merged_dataset = ConcatDataset([sc_tr_dataset, target_dataset_labelled])
 
     net.train()
     print("pseudo label %.2f" %len(input_z))
@@ -169,7 +166,8 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
         #err.backward()
         optimizer_cls.step()
 
-        if batch_idx % args.num_batches_per_test == 0:
+        if batch_idx == len(merged_dataloader):
+        #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
             tg_te_err = test_d(tg_te_loader, net)
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
@@ -178,7 +176,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
             for sstask in sstasks:
                 err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
-            epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
+            epoch_stats.append((batch_idx, len(merged_dataloader), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
             display = ('Iteration %d/%d:' % (batch_idx, len(sc_tr_loader))).ljust(30)
             display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' % (mmd, tg_te_err * 100, sc_te_err * 100, loss_cls*100)
             for err in us_te_err_av:
