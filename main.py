@@ -75,7 +75,7 @@ else:
 
 
 print('==> Building model..')
-if(args.method=='self-supervision'):
+if(args.method=='self-supervision_Adapt'):
     net = ResNet(args.depth, args.width, classes=classes, channels=channels)
     ext = extractor_from_layer3(net)
     net = torch.nn.DataParallel(net)
