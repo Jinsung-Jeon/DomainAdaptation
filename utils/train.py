@@ -137,7 +137,7 @@ def labeling(args, model, tg_tr_loader):
     return excerpt, pseudo_labels, inputs_z
 
 def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader, sc_tr_dataset,sc_te_loader, tg_tr_dataset, tg_te_loader,excerpt, pseudo_labels, input_z):
-    target_dataset_labelled = get_dummy(tg_tr_dataset, excerpt, pseudo_labels, input_z, get_dataset=True)
+    target_dataset_labelled = get_dummy(args, tg_tr_dataset, excerpt, pseudo_labels, input_z, get_dataset=True)
     sc_tr_dataset = random.sample(list(sc_tr_dataset), len(input_z))
     merged_dataset = ConcatDataset([sc_tr_dataset, target_dataset_labelled])
 

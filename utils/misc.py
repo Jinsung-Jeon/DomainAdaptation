@@ -45,14 +45,17 @@ def guess_pseudo_labels(args,out_1, inputs_idx):
 
     return excerpt, pseudo_labels, inputs
 
-class DummyDataset(data.Dataset):
+class DummyDataset(args, data.Dataset):
     def __init__(self, original_dataset, excerpt, pseudo_labels, input_z):
         super(DummyDataset, self).__init__()
         assert len(excerpt) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
         assert len(input_z) == pseudo_labels.size(0), "Size of excerpt images({}) and pseudo labels({}) aren't equal".format(len(excerpt), pseudo_labels.size(0))
         self.dataset = original_dataset
         self.excerpt = excerpt
-        self.pseudo_labels = pseudo_labels
+        if args.source == 'cifar10':
+            self.pseudo_labels = pseudo_labels.numpy()
+        else:
+            self.pseudo_labels = pseudo_labels
         self.input_z = input_z
 
     def __getitem__(self, index):
@@ -62,8 +65,8 @@ class DummyDataset(data.Dataset):
     def __len__(self):
         return len(self.excerpt)
 
-def get_dummy(original_dataset, excerpt, pseudo_labels, input_z, get_dataset=False, batch_size=256):
-    dummy_dataset = DummyDataset(original_dataset, excerpt, pseudo_labels, input_z)
+def get_dummy(args, original_dataset, excerpt, pseudo_labels, input_z, get_dataset=False, batch_size=256):
+    dummy_dataset = DummyDataset(args, original_dataset, excerpt, pseudo_labels, input_z)
     if get_dataset:
         return dummy_dataset
     else:
