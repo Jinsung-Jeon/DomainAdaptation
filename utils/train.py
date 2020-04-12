@@ -140,7 +140,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
     target_dataset_labelled = get_dummy(tg_tr_dataset, excerpt, pseudo_labels, input_z, get_dataset=True)
     import pdb
     pdb.set_trace()
-    sc_tr_dataset_n = random.sample(sc_tr_dataset, len(input_z))
+    sc_tr_dataset_n = random.sample(list(sc_tr_dataset), len(input_z))
 
     merged_dataset = ConcatDataset([sc_tr_dataset_n, target_dataset_labelled])
 
