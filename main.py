@@ -51,6 +51,7 @@ parser.add_argument('--flip', action='store_true')
 parser.add_argument('--lr_flip', default=0.1, type=float)
 parser.add_argument('--domain', action='store_true')
 parser.add_argument('--lr_domain', default=0.1, type=float)
+parser.add_argument('--threshold', default=0.5, type=float)
 ################################################################
 parser.add_argument('--temperature', default=3, type=int)
 parser.add_argument('--depth', default=26, type=int)

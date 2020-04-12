@@ -132,7 +132,7 @@ def labeling(args, model, tg_tr_loader):
         else:
             out_F_1_total = torch.cat((out_F_1_total, outputs_cls.cpu()),0)
             inputs_idx = torch.cat((inputs_idx, inputs.cpu()),0)
-    excerpt, pseudo_labels, inputs_z = guess_pseudo_labels(out_F_1_total, inputs_idx)
+    excerpt, pseudo_labels, inputs_z = guess_pseudo_labels(args, out_F_1_total, inputs_idx)
 
     return excerpt, pseudo_labels, inputs_z
 

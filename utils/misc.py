@@ -11,6 +11,7 @@ import torch.utils.data as data
 import torch.nn.functional as F
 from torch.autograd import Variable
 
+
 def write_to_text(name, content):
     with open(name, 'w') as text_file:
         text_file.write(content)
@@ -32,10 +33,10 @@ def print_nparams(model):
     nparams = sum([param.nelement() for param in model.parameters()])
     print('numver of parameters: %d' % (nparams))
 
-def guess_pseudo_labels(out_1, inputs_idx, threshold=0.7):
+def guess_pseudo_labels(args,out_1, inputs_idx):
     out_2 = F.softmax(out_1, dim=1)
     pred_1, _ = torch.max(out_2, 1)
-    filtered_idx = torch.nonzero(pred_1 > threshold).squeeze()
+    filtered_idx = torch.nonzero(pred_1 > args.threshold).squeeze()
     _, pred_idx = torch.max(out_1[filtered_idx, :], 1)
 
     pseudo_labels = pred_idx
