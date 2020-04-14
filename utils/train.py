@@ -179,7 +179,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
             for sstask in sstasks:
                 err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
-            epoch_stats.append((batch_idx, len(input_z//256), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
+            epoch_stats.append((batch_idx, len(input_z)//256, mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
             display = ('Iteration %d/%d:' % (batch_idx, len(sc_tr_loader))).ljust(30)
             display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' % (mmd, tg_te_err * 100, sc_te_err * 100, loss_cls*100)
             for err in us_te_err_av:
