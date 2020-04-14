@@ -147,14 +147,14 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
     merged_dataloader = make_data_loader(merged_dataset)
     target_dataloader_labelled = get_inf_iterator(make_data_loader(target_dataset_labelled))
     epoch_stats = []
-    for batch_idx, (images, labels) in enumerate(next(target_dataset_labelled)):
+    for batch_idx, (images, labels) in enumerate(target_dataloader_labelled):
     #for batch_idx, (images, labels) in enumerate(merged_dataloader):
         #images_tgt, labels_tgt = next(target_dataloader_labelled)
 
-        images = make_variable(images)
-        labels = make_variable(labels)
-        #images_tgt = make_variable(images_tgt)
-        #labels_tgt = make_variable(labels_tgt)
+        #images = make_variable(images)
+        #labels = make_variable(labels)
+        images_tgt = make_variable(images_tgt)
+        labels_tgt = make_variable(labels_tgt)
 
         optimizer_cls.zero_grad()
 
@@ -167,7 +167,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
         #err.backward()
         optimizer_cls.step()
 
-        if batch_idx == len(merged_dataloader)-1:
+        if batch_idx == len(target_dataloader_labelled)-1:
         #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
             tg_te_err = test_d(tg_te_loader, net)
