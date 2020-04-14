@@ -160,7 +160,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
 
         #output_cls, _ = net(images)
         output_cls_tgt, _ = net(images_tgt)
-        loss_cls = criterion_cls(output_cls_tgt, labels)
+        loss_cls = criterion_cls(output_cls_tgt, labels_tgt)
         #loss_domain = criterion_cls(output_cls_tgt, labels_tgt)
         loss_cls.backward()
         #err = loss_cls + loss_domain
