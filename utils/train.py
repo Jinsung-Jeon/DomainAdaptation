@@ -151,7 +151,6 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
     #for batch_idx, (images, labels) in enumerate(merged_dataloader):
         #images_tgt, labels_tgt = next(target_dataloader_labelled)
 
-        print(batch_idx)
         #images = make_variable(images)
         #labels = make_variable(labels)
         images_tgt = make_variable(images_tgt)
