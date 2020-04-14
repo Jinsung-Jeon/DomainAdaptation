@@ -147,8 +147,9 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
     merged_dataloader = make_data_loader(merged_dataset)
     target_dataloader_labelled = get_inf_iterator(make_data_loader(target_dataset_labelled))
     epoch_stats = []
-    for batch_idx, (images, labels) in enumerate(merged_dataloader):
-        images_tgt, labels_tgt = next(target_dataloader_labelled)
+    for batch_idx, (images, labels) in enumerate(next(target_dataset_labelled)):
+    #for batch_idx, (images, labels) in enumerate(merged_dataloader):
+        #images_tgt, labels_tgt = next(target_dataloader_labelled)
 
         images = make_variable(images)
         labels = make_variable(labels)
@@ -157,9 +158,9 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
 
         optimizer_cls.zero_grad()
 
-        output_cls, _ = net(images)
+        #output_cls, _ = net(images)
         output_cls_tgt, _ = net(images_tgt)
-        loss_cls = criterion_cls(output_cls, labels)
+        loss_cls = criterion_cls(output_cls_tgt, labels)
         #loss_domain = criterion_cls(output_cls_tgt, labels_tgt)
         loss_cls.backward()
         #err = loss_cls + loss_domain
