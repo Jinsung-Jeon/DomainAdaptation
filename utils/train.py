@@ -78,7 +78,6 @@ def train(args, net, ext, sstasks, criterion_cls, optimizer_cls, scheduler_cls, 
         #domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
         #domain_label = domain.cuda()
-        print(batch_idx)
         #target train
         #_, domain_output = net(tg_tr_inputs)
         #err_t_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
@@ -171,9 +170,8 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
         if batch_idx == (len(input_z)//256)-1:
         #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
-            print("2")
             tg_te_err = test_d(tg_te_loader, net)
-            print("3")
+
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
             us_te_err_av = []
             for sstask in sstasks:
