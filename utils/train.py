@@ -167,7 +167,7 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
         #err.backward()
         optimizer_cls.step()
 
-        if batch_idx == len(target_dataloader_labelled)-1:
+        if batch_idx == len(target_dataset_labelled)-1:
         #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
             tg_te_err = test_d(tg_te_loader, net)
