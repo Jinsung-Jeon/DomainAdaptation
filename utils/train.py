@@ -171,14 +171,15 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
         if batch_idx == (len(input_z)//256)-1:
         #if batch_idx % args.num_batches_per_test == 0:
             sc_te_err = test_d(sc_te_loader, net)
+            print("2")
             tg_te_err = test_d(tg_te_loader, net)
+            print("3")
             mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
-
             us_te_err_av = []
             for sstask in sstasks:
                 err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
-            epoch_stats.append((batch_idx, len(merged_dataloader), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
+            epoch_stats.append((batch_idx, len(input_z//256), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
             display = ('Iteration %d/%d:' % (batch_idx, len(sc_tr_loader))).ljust(30)
             display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' % (mmd, tg_te_err * 100, sc_te_err * 100, loss_cls*100)
             for err in us_te_err_av:
