@@ -144,7 +144,8 @@ def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader,
     print("pseudo label %.2f" %len(input_z))
 
     #merged_dataloader = make_data_loader(merged_dataset)
-    target_dataloader_labelled = get_inf_iterator(make_data_loader(target_dataset_labelled))
+    target_dataloader_labelled = make_data_loader(target_dataset_labelled)
+
     epoch_stats = []
     for batch_idx, (images_tgt, labels_tgt) in enumerate(target_dataloader_labelled):
     #for batch_idx, (images, labels) in enumerate(merged_dataloader):
