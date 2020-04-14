@@ -78,7 +78,7 @@ def train(args, net, ext, sstasks, criterion_cls, optimizer_cls, scheduler_cls, 
         #domain = torch.stack([domain_label, domain_labels], 1)
         #domain_label = domain_label.long().cuda()
         #domain_label = domain.cuda()
-
+        print(batch_idx)
         #target train
         #_, domain_output = net(tg_tr_inputs)
         #err_t_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
