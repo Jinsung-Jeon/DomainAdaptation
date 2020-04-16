@@ -77,10 +77,14 @@ else:
 
 print('==> Building model..')
 net = ResNet(args.depth, args.width, classes=classes, channels=channels)
+net_d = ResNet(args.depth, args.width, classes=classes, channels=channels)
 ext = extractor_from_layer3(net)
 net = torch.nn.DataParallel(net)
+net_d = torch.nn.DataParallel(net_d)
 ext = torch.nn.DataParallel(ext)
+
 net.cuda()
+net_d.cuda()
 ext.cuda()
     
 print('==> Preparing datasets..')
@@ -113,7 +117,7 @@ for epoch in range(1, args.nepoch+1):
     #plot_all_epoch_stats(all_epoch_stats, args.outf)
     if args.method == 'self-supervision_Adapt':
         excerpt, pseudo_labels, input_z = labeling(args, net, tg_tr_loader)
-        epoch_stats = train_d(args, net, ext, sstasks, criterion, optimizer, sc_tr_loader, sc_tr_dataset, sc_te_loader, tg_te_dataset, tg_te_loader, excerpt, pseudo_labels, input_z)
+        epoch_stats = train_d(args, net_d, ext, sstasks, criterion, optimizer, sc_tr_loader, sc_tr_dataset, sc_te_loader, tg_te_dataset, tg_te_loader, excerpt, pseudo_labels, input_z)
     all_epoch_stats.append(epoch_stats)
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
     plot_all_epoch_stats(all_epoch_stats, args.outf)
