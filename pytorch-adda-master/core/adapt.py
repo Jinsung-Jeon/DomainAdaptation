@@ -7,6 +7,7 @@ import torch.optim as optim
 from torch import nn
 
 import params
+import plot_all_epoch_stats
 from utils import make_variable
 
 
@@ -32,11 +33,11 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
     ####################
     # 2. train network #
     ####################
-
+    all_epoch_stats = []
     for epoch in range(params.num_epochs):
         # zip source and target data pair
         data_zip = enumerate(zip(src_data_loader, tgt_data_loader))
-        
+        epoch_stats = []
         for step, ((images_src, _), (images_tgt, _)) in data_zip:
             ###########################
             # 2.1 train discriminator #
@@ -100,15 +101,17 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             # 2.3 print step info #
             #######################
             if ((step + 1) % params.log_step == 0):
+                epoch_stats.append((step, len_data_loader, loss_critic.item(), acc.item()))
                 print("Epoch [{}/{}] Step [{}/{}]:"
-                      "d_loss={:.5f} g_loss={:.5f} acc={:.5f}"
+                      "g_loss={:.5f} acc={:.5f}"
                       .format(epoch + 1,
                               params.num_epochs,
                               step + 1,
                               len_data_loader,
                               loss_critic.item(),
                               acc.item()))
-
+        all_epoch_stats.append(epoch_stats)
+        plot_all_epoch_stats(all_epoch_stats, params.outf)
         #############################
         # 2.4 save model parameters #
         #############################
