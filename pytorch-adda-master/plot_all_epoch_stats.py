@@ -35,12 +35,10 @@ def parse_all_epoch_stats(all_epoch_stats, prune=True):
 
 	for epoch, epoch_stats in enumerate(all_epoch_stats):
 		for stats in epoch_stats:
-			import pdb
-			pdb.set_trace()
 			err.append(stats[2])
 			acc.append(stats[3])
 			xs.append(base_iter_count + stats[0])
-		base_iter_count += epoch_stats[1]
+		base_iter_count += stats[1]
 		ticks.append(base_iter_count)
 		labels.append(epoch+1)
 
