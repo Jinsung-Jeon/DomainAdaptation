@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     if not (tgt_encoder.restored and critic.restored and
             params.tgt_model_trained):
-        train_tgt(tgt_encoder, src_classifier,critic,src_data_loader, tgt_data_loader, tgt_data_loader_eval)
+        train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval)
     '''
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
