@@ -10,7 +10,7 @@ from plot_all_epoch_stats import plot_all_epoch_stats
 from utils import make_variable
 
 
-def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt):
+def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt,src_data_loader_eval):
     """Train encoder for target domain."""
     ####################
     # 1. setup network #
@@ -101,6 +101,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             if ((step+1) == 17):
             #if ((step + 1) % params.log_step == 0):
                 tot_loss, acc = eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
+                tot_loss_s, acc_s = eval_tgt(tgt_encoder, src_classifier, src_data_loader_eval)
                 epoch_stats.append((step, len_data_loader, tot_loss, acc))
                 print("Epoch [{}/{}] Step [{}/{}]:"
                       "t_loss={:.5f}  acc={:.5f}"
@@ -110,6 +111,14 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
                               len_data_loader,
                               loss_critic,
                               acc))
+                print("Epoch [{}/{}] Step [{}/{}]:"
+                  "t_loss={:.5f}  acc={:.5f}"
+                  .format(epoch + 1,
+                          params.num_epochs,
+                          step + 1,
+                          len_data_loader,
+                          tot_loss_s,
+                          acc_s))
         all_epoch_stats.append(epoch_stats)
         plot_all_epoch_stats(all_epoch_stats, params.outf)
         #############################
