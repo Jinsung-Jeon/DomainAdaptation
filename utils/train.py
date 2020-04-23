@@ -13,10 +13,10 @@ import pdb
 from utils.misc import get_dummy, make_data_loader, get_inf_iterator, guess_pseudo_labels, make_variable
 from torch.utils.data import ConcatDataset
 
+
 def test(dataloader, model):
     model.eval()
     correct_cls = 0
-    correct_domain = 0
     total = 0
     for batch_idx, (inputs, labels) in enumerate(dataloader):
         inputs, labels = inputs.cuda(), labels.cuda()
@@ -29,33 +29,22 @@ def test(dataloader, model):
         correct_cls += predicted_cls.eq(labels).sum().item()
         #correct_domain += predicted_domain.eq(1).sum().item()
     model.train()
-    
-    return 1 - correct_cls/total#, 1 - correct_domain/total
+    return 1 - correct_cls/total
 
-def test_d(dataloader, model):
-    model.eval()
-    correct = 0
-    total = 0
-    for batch_idx, (inputs, labels) in enumerate(dataloader):
-        inputs, labels = inputs.cuda(), labels.cuda()
-        with torch.no_grad():
-            outputs, outputs_domain = model(inputs)
-        _, predicted = outputs.max(1)
-        total += labels.size(0)
-        correct += predicted.eq(labels).sum().item()
-    model.train()
-    return 1 - correct / total
 
-def train(args, net, ext, sstasks, criterion_cls, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader):
+def train(args, net, ext, criterion_cls, optimizer_cls, scheduler_cls, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader):
     net.train()
+    '''
     for sstask in sstasks:
         sstask.head.train()
         sstask.scheduler.step()
-
+    '''
     epoch_stats = []
     for batch_idx, (sc_tr_inputs, sc_tr_labels) in enumerate(sc_tr_loader):
+        '''
         for sstask in sstasks:
             sstask.train_batch()
+        '''
         #source domain prepare
         sc_tr_inputs, sc_tr_labels = sc_tr_inputs.cuda(), sc_tr_labels.cuda()
         #domain_label = torch.zeros(len(sc_tr_inputs))
@@ -67,7 +56,7 @@ def train(args, net, ext, sstasks, criterion_cls, optimizer_cls, scheduler_cls, 
 
         #pdb.set_trace()
         #source domain train
-        outputs_cls, domain_output = net(sc_tr_inputs)
+        outputs_cls = net(sc_tr_inputs)
         loss_cls = criterion_cls(outputs_cls, sc_tr_labels)
         #loss_domain = loss_fn_kd(domain_output, domain_label, args).cuda()
         loss_cls.backward()
@@ -102,15 +91,17 @@ def train(args, net, ext, sstasks, criterion_cls, optimizer_cls, scheduler_cls, 
         #optimizer_cls.step()
         if batch_idx == len(sc_tr_loader)-1:
         #if batch_idx % args.num_batches_per_test == 0:
-            sc_te_err = test_d(sc_te_loader, net)
-            tg_te_err = test_d(tg_te_loader, net)
-            mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
+            sc_te_err = test(sc_te_loader, net)
+            tg_te_err = test(tg_te_loader, net)
+            #mmd = get_mmd(sc_te_loader, tg_te_loader, ext)
 
             us_te_err_av = []
+            '''
             for sstask in sstasks:
                 err_av, err_sc, err_tg = sstask.test()
                 us_te_err_av.append(err_av)
-            epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, us_te_err_av,loss_cls))
+            '''
+            epoch_stats.append((batch_idx, len(sc_tr_loader), mmd, tg_te_err, sc_te_err, loss_cls))
             display = ('Iteration %d/%d:' %(batch_idx, len(sc_tr_loader))).ljust(24)
             display += '%.2f\t%.2f\t\t%.2f\t\t%.2f\t\t' %(mmd, tg_te_err*100, sc_te_err*100, loss_cls*100)
             for err in us_te_err_av:
@@ -118,6 +109,7 @@ def train(args, net, ext, sstasks, criterion_cls, optimizer_cls, scheduler_cls, 
             print(display)
     return epoch_stats
 
+'''
 def labeling(args, model, tg_tr_loader):
     model.eval()
     out_F_1_total = None
@@ -134,7 +126,7 @@ def labeling(args, model, tg_tr_loader):
     excerpt, pseudo_labels, inputs_z = guess_pseudo_labels(args, out_F_1_total, inputs_idx)
 
     return excerpt, pseudo_labels, inputs_z
-
+'''
 def train_d(args, net, ext, sstasks, criterion_cls, optimizer_cls, sc_tr_loader, sc_tr_dataset,sc_te_loader, tg_tr_dataset, tg_te_loader,excerpt, pseudo_labels, input_z):
     target_dataset_labelled = get_dummy(args, tg_tr_dataset, excerpt, pseudo_labels, input_z, get_dataset=True)
     #sc_tr_dataset = random.sample(list(sc_tr_dataset), len(input_z))

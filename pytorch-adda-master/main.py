@@ -8,7 +8,7 @@ import os
 import torch.nn as nn
 import torch
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0, 2'
+os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2'
 if __name__ == '__main__':
     # init random seed
     init_random_seed(params.manual_seed)
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     # train target encoder by GAN
     print("=== Training encoder for target domain ===")
-    print(">>> Target Encoder <<<")
+    print(">>> Source Encoder <<<")
     print(tgt_encoder)
     print(">>> Critic <<<")
     print(critic)
@@ -58,10 +58,11 @@ if __name__ == '__main__':
     # init weights of target encoder with those of source encoder
     if not tgt_encoder.restored:
         tgt_encoder.load_state_dict(src_encoder.state_dict())
+        src_classifier.load_state_dict(src_classifier.state_dict())
 
     if not (tgt_encoder.restored and critic.restored and
             params.tgt_model_trained):
-        tgt_encoder = train_tgt(src_encoder, tgt_encoder, critic,
+        tgt_encoder = train_tgt(tgt_encoder, src_classifier,critic,
                                 src_data_loader, tgt_data_loader)
 
     # eval target encoder on test set of target dataset

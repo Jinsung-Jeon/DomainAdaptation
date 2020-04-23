@@ -77,14 +77,11 @@ else:
 
 print('==> Building model..')
 net = ResNet(args.depth, args.width, classes=classes, channels=channels)
-net_d = ResNet(args.depth, args.width, classes=classes, channels=channels)
 ext = extractor_from_layer3(net)
 net = torch.nn.DataParallel(net)
-net_d = torch.nn.DataParallel(net_d)
 ext = torch.nn.DataParallel(ext)
 
 net.cuda()
-net_d.cuda()
 ext.cuda()
     
 print('==> Preparing datasets..')
@@ -96,28 +93,26 @@ tg_tr_dataset, tg_te_dataset = prepare_dataset(args.target, image_size, channels
 tg_tr_loader = torchdata.DataLoader(tg_tr_dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
 tg_te_loader = torchdata.DataLoader(tg_te_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
-sstasks = parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
+#sstasks = parse_tasks(args, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
 criterion = nn.CrossEntropyLoss().cuda()
 
 parameters = list(net.parameters())
+'''
 for sstask in sstasks:
     parameters += list(sstask.head.parameters())
+'''
 optimizer = optim.SGD(parameters, lr=args.lr, momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [args.milestone_1, args.milestone_2], gamma=0.1, last_epoch=-1)
-    
+
+
 all_epoch_stats = []
 
 print('==> Running..')
 for epoch in range(1, args.nepoch+1):
     print('Source epoch %d/%d lr=%.3f' %(epoch, args.nepoch, optimizer.param_groups[0]['lr']))
     print('Error (%)\t\tmmd\ttarget test\tsource test\tloss\tunsupervised test')
-    epoch_stats = train(args, net, ext, sstasks, 
-        criterion, optimizer, scheduler, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader)
-    #all_epoch_stats.append(epoch_stats)
-    #plot_all_epoch_stats(all_epoch_stats, args.outf)
-    if args.method == 'self-supervision_Adapt':
-        excerpt, pseudo_labels, input_z = labeling(args, net, tg_tr_loader)
-        epoch_stats = train_d(args, net, ext, sstasks, criterion, optimizer, sc_tr_loader, sc_tr_dataset, sc_te_loader, tg_te_dataset, tg_te_loader, excerpt, pseudo_labels, input_z)
+    epoch_stats = train(args, net, ext, criterion, optimizer, scheduler, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader)
+    epoch_stats = train(args, net, ext, criterion, optimizer, scheduler, sc_tr_loader, sc_te_loader, tg_tr_loader, tg_te_loader)
     all_epoch_stats.append(epoch_stats)
     torch.save(all_epoch_stats, args.outf + '/loss.pth')
     plot_all_epoch_stats(all_epoch_stats, args.outf)

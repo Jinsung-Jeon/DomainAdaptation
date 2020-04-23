@@ -10,8 +10,7 @@ import params
 from utils import make_variable
 
 
-def train_tgt(src_encoder, tgt_encoder, critic,
-              src_data_loader, tgt_data_loader):
+def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader):
     """Train encoder for target domain."""
     ####################
     # 1. setup network #
@@ -19,14 +18,12 @@ def train_tgt(src_encoder, tgt_encoder, critic,
 
     # set train state for Dropout and BN layers
     tgt_encoder.train()
+    src_classifier.train()
     critic.train()
 
     # setup criterion and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer_tgt = optim.Adam(tgt_encoder.parameters(),
-                               lr=params.c_learning_rate,
-                               betas=(params.beta1, params.beta2))
-    optimizer_critic = optim.Adam(critic.parameters(),
+    optimizer_critic = optim.Adam(list(tgt_encoder.parameters()) + list(src_classifier.parameters()) + list(critic.parameters()),
                                   lr=params.d_learning_rate,
                                   betas=(params.beta1, params.beta2))
 
@@ -53,8 +50,8 @@ def train_tgt(src_encoder, tgt_encoder, critic,
             optimizer_critic.zero_grad()
 
             # extract and concat features
-            feat_src = src_encoder(images_src)
-            feat_tgt = tgt_encoder(images_tgt)
+            feat_src = src_classifier(tgt_encoder(images_src))
+            feat_tgt = src_classifier(tgt_encoder(images_tgt))
             feat_concat = torch.cat((feat_src, feat_tgt), 0)
             
             # predict on discriminator
@@ -82,10 +79,9 @@ def train_tgt(src_encoder, tgt_encoder, critic,
 
             # zero gradients for optimizer
             optimizer_critic.zero_grad()
-            optimizer_tgt.zero_grad()
             
             # extract and target features
-            feat_tgt = tgt_encoder(images_tgt)
+            feat_tgt = src_classifier(tgt_encoder(images_tgt))
 
             # predict on discriminator
             pred_tgt = critic(feat_tgt)
@@ -98,7 +94,7 @@ def train_tgt(src_encoder, tgt_encoder, critic,
             loss_tgt.backward()
 
             # optimize target encoder
-            optimizer_tgt.step()
+            optimizer_critic.step()
 
             #######################
             # 2.3 print step info #
@@ -111,7 +107,6 @@ def train_tgt(src_encoder, tgt_encoder, critic,
                               step + 1,
                               len_data_loader,
                               loss_critic.item(),
-                              loss_tgt.item(),
                               acc.item()))
 
         #############################
