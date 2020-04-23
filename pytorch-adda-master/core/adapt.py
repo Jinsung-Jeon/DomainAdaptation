@@ -108,8 +108,8 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
                               params.num_epochs,
                               step + 1,
                               len_data_loader,
-                              tot_critic.item(),
-                              acc.item()))
+                              tot_loss,
+                              acc))
         all_epoch_stats.append(epoch_stats)
         plot_all_epoch_stats(all_epoch_stats, params.outf)
         #############################
