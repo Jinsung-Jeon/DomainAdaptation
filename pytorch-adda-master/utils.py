@@ -3,6 +3,7 @@
 import os
 import random
 
+import torch.nn as nn
 import torch
 import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
@@ -77,6 +78,7 @@ def init_model(net, restore):
     # check if cuda is available
     if torch.cuda.is_available():
         cudnn.benchmark = True
+        net = torch.nn.DataParallel(net)
         net.cuda()
 
     return net

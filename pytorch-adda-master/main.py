@@ -27,15 +27,6 @@ if __name__ == '__main__':
                              restore=params.tgt_encoder_restore)
     critic = init_model(Discriminator(input_dims=params.d_input_dims, hidden_dims=params.d_hidden_dims, output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
-    src_encoder = torch.nn.DataParallel(src_encoder)
-    src_classifier = torch.nn.DataParallel(src_classifier)
-    tgt_encoder = torch.nn.DataParallel(tgt_encoder)
-    critic = torch.nn.DataParallel(critic)
-
-    src_encoder.cuda()
-    src_classifier.cuda()
-    tgt_encoder.cuda()
-    critic.cuda()
     # load models
 
     # train source model
