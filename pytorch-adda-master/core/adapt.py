@@ -5,13 +5,12 @@ import os
 import torch
 import torch.optim as optim
 from torch import nn
-from test import eval_tgt
 import params
 from plot_all_epoch_stats import plot_all_epoch_stats
 from utils import make_variable
 
 
-def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
+def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt):
     """Train encoder for target domain."""
     ####################
     # 1. setup network #
