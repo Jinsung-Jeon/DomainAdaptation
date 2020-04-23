@@ -78,7 +78,6 @@ def init_model(net, restore):
     # check if cuda is available
     if torch.cuda.is_available():
         cudnn.benchmark = True
-        net = torch.nn.DataParallel(net)
         net.cuda()
 
     return net
