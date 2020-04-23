@@ -34,7 +34,7 @@ log_step_pre = 20
 eval_step_pre = 20
 save_step_pre = 100
 num_epochs = 100
-log_step = 20
+log_step = 5
 save_step = 20
 manual_seed = None
 

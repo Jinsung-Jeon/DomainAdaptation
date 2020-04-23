@@ -42,7 +42,8 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             ###########################
             # 2.1 train discriminator #
             ###########################
-            
+            import pdb
+            pdb.set_trace()
             # make images variable
             images_src = make_variable(images_src)
             images_tgt = make_variable(images_tgt)
@@ -95,7 +96,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
 
             # optimize target encoder
             optimizer_critic.step()
-
+            print(step)
             #######################
             # 2.3 print step info #
             #######################
