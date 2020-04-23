@@ -13,13 +13,13 @@ def eval_tgt(encoder, classifier, data_loader):
     classifier.eval()
 
     # init loss and accuracy
-    loss = 0
     acc = 0
     tot_loss = 0
     # set loss function
     criterion = nn.CrossEntropyLoss()
 
     # evaluate network
+    epoch_stat = []
     with torch.no_grad():
         for (images, labels) in data_loader:
             images = make_variable(images)
@@ -37,3 +37,4 @@ def eval_tgt(encoder, classifier, data_loader):
         acc /= len(data_loader.dataset)
 
     print("Avg Loss = {}, Avg Accuracy = {:2%}".format(tot_loss, acc))
+    return tot_loss, acc

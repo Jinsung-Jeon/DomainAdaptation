@@ -5,13 +5,13 @@ import os
 import torch
 import torch.optim as optim
 from torch import nn
-
+from core import eval_src, eval_tgt
 import params
 import plot_all_epoch_stats
 from utils import make_variable
 
 
-def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader):
+def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval):
     """Train encoder for target domain."""
     ####################
     # 1. setup network #
@@ -70,9 +70,8 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             # optimize critic
             optimizer_critic.step()
 
-            pred_cls = torch.squeeze(pred_concat.max(1)[1])
+            #pred_cls = torch.squeeze(pred_concat.max(1)[1])
             #_, pred_cls = torch.squeeze(torch.max(pred_concat.data, 1))
-            acc = (pred_cls == label_concat).float().mean()
             
             ############################
             # 2.2 train target encoder #
@@ -100,15 +99,17 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             #######################
             # 2.3 print step info #
             #######################
+
             if ((step + 1) % params.log_step == 0):
-                epoch_stats.append((step, len_data_loader, loss_critic.item(), acc.item()))
+                tot_loss, acc = eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
+                epoch_stats.append((step, len_data_loader, tot.item(), acc.item()))
                 print("Epoch [{}/{}] Step [{}/{}]:"
-                      "g_loss={:.5f} acc={:.5f}"
+                      "t_loss={:.5f}  acc={:.5f}"
                       .format(epoch + 1,
                               params.num_epochs,
                               step + 1,
                               len_data_loader,
-                              loss_critic.item(),
+                              tot_critic.item(),
                               acc.item()))
         all_epoch_stats.append(epoch_stats)
         plot_all_epoch_stats(all_epoch_stats, params.outf)
@@ -129,4 +130,3 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
     torch.save(tgt_encoder.state_dict(), os.path.join(
         params.model_root,
         "ADDA-target-encoder-final.pt"))
-    return tgt_encoder

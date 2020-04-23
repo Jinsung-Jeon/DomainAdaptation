@@ -19,6 +19,13 @@ if __name__ == '__main__':
     tgt_data_loader = get_data_loader(params.tgt_dataset)
     tgt_data_loader_eval = get_data_loader(params.tgt_dataset, split='test')
 
+    ResNetEncoder = torch.nn.DataParallel(ResNetEncoder)
+    LeNetClassifier = torch.nn.DataParallel(LeNetClassifier)
+    Discriminator = torch.nn.DataParallel(Discriminator)
+
+    ResNetEncoder.cuda()
+    LeNetClassifier.cuda()
+    Discriminator.cuda()
     # load models
 
     src_encoder = init_model(net=ResNetEncoder(depth=26),
@@ -62,12 +69,12 @@ if __name__ == '__main__':
 
     if not (tgt_encoder.restored and critic.restored and
             params.tgt_model_trained):
-        tgt_encoder = train_tgt(tgt_encoder, src_classifier,critic,
-                                src_data_loader, tgt_data_loader)
-
+        train_tgt(tgt_encoder, src_classifier,critic,src_data_loader, tgt_data_loader, tgt_data_loader_eval)
+    '''
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
     print(">>> source only <<<")
     eval_tgt(src_encoder, src_classifier, tgt_data_loader_eval)
     print(">>> domain adaption <<<")
     eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
+    '''
