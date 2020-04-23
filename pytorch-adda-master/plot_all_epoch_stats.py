@@ -53,7 +53,7 @@ def plot_all_epoch_stats(all_epoch_stats, outf):
 	plt.plot(xs, np.asarray(acc) * 100, color='k', label='ACC')
 	#plt.plot(xs, np.asarray(tg_te_err)*100, color='r', label='target')
 	#plt.plot(xs, np.asarray(sc_te_err)*100, color='b', label='source')
-	plt.plot(xs, np.asarray(err) * 100, color='y', label='loss')
+	plt.plot(xs, np.asarray(err), color='y', label='loss')
 
 	colors = ['g', 'm', 'c', 'y']
 	'''
