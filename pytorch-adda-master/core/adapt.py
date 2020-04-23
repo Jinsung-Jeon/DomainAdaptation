@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch import nn
 import test
 import params
-import plot_all_epoch_stats
+from plot_all_epoch_stats import plot_all_epoch_stats
 from utils import make_variable
 
 
