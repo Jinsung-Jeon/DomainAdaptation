@@ -20,14 +20,19 @@ if __name__ == '__main__':
     tgt_data_loader_eval = get_data_loader(params.tgt_dataset, split='test')
 
     ResNetEncoder = torch.nn.DataParallel(ResNetEncoder(depth=26))
+    print("okay")
     LeNetClassifier = torch.nn.DataParallel(LeNetClassifier())
+    print("okay")
     Discriminator = torch.nn.DataParallel(Discriminator(input_dims=params.d_input_dims,
                                       hidden_dims=params.d_hidden_dims,
                                       output_dims=params.d_output_dims))
-
+    print("okay")
     ResNetEncoder.cuda()
+    print("okay")
     LeNetClassifier.cuda()
+    print("okay")
     Discriminator.cuda()
+    print("okay")
     # load models
 
     src_encoder = init_model(net=ResNetEncoder,
