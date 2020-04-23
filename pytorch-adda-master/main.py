@@ -26,7 +26,7 @@ if __name__ == '__main__':
                              restore=params.src_encoder_restore)
     src_classifier = init_model(net=LeNetClassifier,
                                 restore=params.src_classifier_restore)
-    tgt_encoder = init_model(net=ResNetEncoder(depth=26),
+    tgt_encoder = init_model(net=ResNetEncoder,
                              restore=params.tgt_encoder_restore)
     critic = init_model(Discriminator,
                         restore=params.d_model_restore)
