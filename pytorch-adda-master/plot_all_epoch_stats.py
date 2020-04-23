@@ -38,7 +38,7 @@ def parse_all_epoch_stats(all_epoch_stats, prune=True):
 			err.append(stats[2])
 			acc.append(stats[3])
 			xs.append(base_iter_count + stats[0])
-		base_iter_count += stats[1]
+			base_iter_count += stats[1]
 		ticks.append(base_iter_count)
 		labels.append(epoch+1)
 
