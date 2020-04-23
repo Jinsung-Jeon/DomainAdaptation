@@ -5,7 +5,7 @@ import os
 import torch
 import torch.optim as optim
 from torch import nn
-from core import eval_src, eval_tgt
+from test import eval_src, eval_tgt
 import params
 import plot_all_epoch_stats
 from utils import make_variable
