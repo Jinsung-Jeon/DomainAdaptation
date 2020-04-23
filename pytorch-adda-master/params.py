@@ -45,4 +45,4 @@ beta1 = 0.5
 beta2 = 0.9
 
 # show plot
-outf = 'output/demo'
+outf = 'output'
