@@ -19,34 +19,24 @@ if __name__ == '__main__':
     tgt_data_loader = get_data_loader(params.tgt_dataset)
     tgt_data_loader_eval = get_data_loader(params.tgt_dataset, split='test')
 
-    ResNetEncoder = torch.nn.DataParallel(ResNetEncoder(depth=26))
-    print("okay")
-    LeNetClassifier = torch.nn.DataParallel(LeNetClassifier())
-    print("okay")
-    Discriminator = torch.nn.DataParallel(Discriminator(input_dims=params.d_input_dims,
-                                      hidden_dims=params.d_hidden_dims,
-                                      output_dims=params.d_output_dims))
-    print("okay")
-    ResNetEncoder.cuda()
-    print("okay")
-    LeNetClassifier.cuda()
-    print("okay")
-    Discriminator.cuda()
-    print("okay")
-    # load models
-
-    src_encoder = init_model(net=ResNetEncoder,
+    src_encoder = init_model(net=ResNetEncoder(depth=26),
                              restore=params.src_encoder_restore)
-    print("okay")
-    src_classifier = init_model(net=LeNetClassifier,
+    src_classifier = init_model(net=LeNetClassifier(),
                                 restore=params.src_classifier_restore)
-    print("okay")
-    tgt_encoder = init_model(net=ResNetEncoder,
+    tgt_encoder = init_model(net=ResNetEncoder(depth=26),
                              restore=params.tgt_encoder_restore)
-    print("okay")
-    critic = init_model(Discriminator,
+    critic = init_model(Discriminator(input_dims=params.d_input_dims, hidden_dims=params.d_hidden_dims, output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
-    print("okay")
+    src_encoder = torch.nn.DataParallel(src_encoder)
+    src_classifier = torch.nn.DataParallel(src_classifier)
+    tgt_encoder = torch.nn.DataParallel(tgt_encoder)
+    critic = torch.nn.DataParallel(critic)
+
+    src_encoder.cuda()
+    src_classifier.cuda()
+    tgt_encoder.cuda()
+    critic.cuda()
+    # load models
 
     # train source model
     print("=== Training classifier for source domain ===")
