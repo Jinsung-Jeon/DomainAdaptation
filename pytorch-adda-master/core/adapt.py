@@ -101,7 +101,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
 
             if ((step + 1) % params.log_step == 0):
                 tot_loss, acc = eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
-                epoch_stats.append((step, len_data_loader, tot_loss.item(), acc.item()))
+                epoch_stats.append((step, len_data_loader, tot_loss, acc))
                 print("Epoch [{}/{}] Step [{}/{}]:"
                       "t_loss={:.5f}  acc={:.5f}"
                       .format(epoch + 1,
