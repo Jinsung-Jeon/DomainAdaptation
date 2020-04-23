@@ -23,6 +23,10 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
 
     # setup criterion and optimizer
     criterion = nn.CrossEntropyLoss()
+    optimizer_critic_c = optim.Adam(
+        list(tgt_encoder.parameters()) + list(src_classifier.parameters()),
+        lr=params.d_learning_rate,
+        betas=(params.beta1, params.beta2))
     optimizer_critic = optim.Adam(list(tgt_encoder.parameters()) + list(src_classifier.parameters()) + list(critic.parameters()),
                                   lr=params.d_learning_rate,
                                   betas=(params.beta1, params.beta2))
@@ -37,20 +41,24 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
         # zip source and target data pair
         data_zip = enumerate(zip(src_data_loader, tgt_data_loader))
         epoch_stats = []
-        for step, ((images_src, _), (images_tgt, _)) in data_zip:
+        for step, ((images_src, images_src_labels), (images_tgt, _)) in data_zip:
             ###########################
             # 2.1 train discriminator #
             ###########################
 
             # make images variable
             images_src = make_variable(images_src)
+            images_src_labels = make_variable(images_src_labels)
             images_tgt = make_variable(images_tgt)
-            
             # zero gradients for optimizer
             optimizer_critic.zero_grad()
-
+            optimizer_critic_c.zero_grad()
             # extract and concat features
             feat_src = src_classifier(tgt_encoder(images_src))
+            loss_src = criterion(feat_src, images_src_labels)
+            loss_src.backward()
+            optimizer_critic_c.step()
+
             feat_tgt = src_classifier(tgt_encoder(images_tgt))
             feat_concat = torch.cat((feat_src, feat_tgt), 0)
             
@@ -92,9 +100,8 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             loss_tgt = criterion(pred_tgt, label_tgt)
             loss_tgt.backward()
 
-            # optimize target encoder
-            optimizer_critic.step()
-            print(step)
+            # extract and concat features
+            feat_src = src_classifier(tgt_encoder(images_src))
             #######################
             # 2.3 print step info #
             #######################
