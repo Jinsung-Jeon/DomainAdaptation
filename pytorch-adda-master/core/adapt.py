@@ -98,8 +98,8 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             #######################
             # 2.3 print step info #
             #######################
-
-            if ((step + 1) % params.log_step == 0):
+            if ((step+1) == 17):
+            #if ((step + 1) % params.log_step == 0):
                 tot_loss, acc = eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
                 epoch_stats.append((step, len_data_loader, tot_loss, acc))
                 print("Epoch [{}/{}] Step [{}/{}]:"
@@ -108,7 +108,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
                               params.num_epochs,
                               step + 1,
                               len_data_loader,
-                              tot_loss,
+                              loss_critic,
                               acc))
         all_epoch_stats.append(epoch_stats)
         plot_all_epoch_stats(all_epoch_stats, params.outf)
