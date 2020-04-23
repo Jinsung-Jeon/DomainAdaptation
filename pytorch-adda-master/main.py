@@ -37,12 +37,16 @@ if __name__ == '__main__':
 
     src_encoder = init_model(net=ResNetEncoder,
                              restore=params.src_encoder_restore)
-    src_classifier = init_model(net=LeNetClassifier(),
+    print("okay")
+    src_classifier = init_model(net=LeNetClassifier,
                                 restore=params.src_classifier_restore)
+    print("okay")
     tgt_encoder = init_model(net=ResNetEncoder,
                              restore=params.tgt_encoder_restore)
+    print("okay")
     critic = init_model(Discriminator,
                         restore=params.d_model_restore)
+    print("okay")
 
     # train source model
     print("=== Training classifier for source domain ===")
