@@ -136,10 +136,16 @@ class LeNetClassifier(nn.Module):
     def __init__(self):
         """Init LeNet encoder."""
         super(LeNetClassifier, self).__init__()
-        self.fc2 = nn.Linear(500, 10)
+        self.layer = nn.Sequential(
+            nn.Linear(500, 250),
+            nn.ReLU(),
+            nn.Linear(250, 125),
+            nn.ReLU(),
+            nn.Linear(125, 10),
+        )
 
     def forward(self, feat):
         """Forward the LeNet classifier."""
         out = F.dropout(F.relu(feat), training=self.training)
-        out = self.fc2(out)
+        out = self.layer(out)
         return out
