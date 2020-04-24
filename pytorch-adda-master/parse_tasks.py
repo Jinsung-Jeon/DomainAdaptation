@@ -23,7 +23,7 @@ def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
         from dset_classes.DsetSSRotRand import Rotation
         
         digit = False
-        if params.src_datasetf in ['mnist', 'mnistm', 'svhn', 'svhn_exta', 'usps']:
+        if params.src_dataset in ['mnist', 'mnistm', 'svhn', 'svhn_exta', 'usps']:
             print("No rotation 180 for digits!")
             digit = True
             
