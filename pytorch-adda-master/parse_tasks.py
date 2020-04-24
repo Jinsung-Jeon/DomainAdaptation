@@ -38,7 +38,7 @@ def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
         tu_te_loader = torchdata.DataLoader(tu_te_dataset, batch_size=params.batch_size//2, shuffle=False, num_workers=4)
         
         
-        head = linear_on_layer3(4, 2, 8).cuda()
+        head = linear_on_layer3(4, 1, 8).cuda()
         criterion = nn.CrossEntropyLoss().cuda()
         optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = 0.1, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [5, 10], gamma=0.1, last_epoch=-1)
@@ -61,7 +61,7 @@ def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
         tu_te_loader = torchdata.DataLoader(tu_te_dataset, batch_size=params.batch_size//2, shuffle=False, num_workers=4)
         
         
-        head = linear_on_layer3(4, 2, 4).cuda()
+        head = linear_on_layer3(4, 1, 4).cuda()
         criterion = nn.CrossEntropyLoss().cuda()
         optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = 0.1, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [5, 10], gamma=0.1, last_epoch=-1)
@@ -86,7 +86,7 @@ def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
         tu_te_loader = torchdata.DataLoader(tu_te_dataset, batch_size=params.batch_size//2, shuffle=False, num_workers=0)
         
         
-        head = linear_on_layer3(2, 2, 8).cuda()
+        head = linear_on_layer3(2, 1, 8).cuda()
         criterion = nn.CrossEntropyLoss().cuda()
         optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = 0.1, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [5, 10], gamma=0.1, last_epoch=-1)
