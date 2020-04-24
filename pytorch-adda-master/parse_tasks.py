@@ -69,7 +69,7 @@ def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
         sstask.assign_test(test)
         sstasks.append(sstask)
         
-    if prams.flip:
+    if params.flip:
         print("Task: flip prediction")
         from dset_classes.DsetSSFlipRand import Flip
             
