@@ -101,7 +101,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             # compute loss for target encoder
             loss_tgt = criterion(pred_tgt, label_tgt)
             loss_tgt.backward()
-
+            optimizer_critic.step()
             #######################
             # 2.3 print step info #
             #######################
