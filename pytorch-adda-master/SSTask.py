@@ -11,8 +11,8 @@ import torch.nn as nn
 class SSTask():
     def __init__(self, ext, head, criterion, optimizer, scheduler, su_tr_loader, su_te_loader,tu_tr_loader, tu_te_loader):
         self.test_static = None
-        self.ext = ext
-        self.head = head
+        self.tgt_encoder = ext
+        self.supervision = head
         self.criterion = criterion
         self.optimizer = optimizer
         self.scheduler = scheduler
@@ -40,7 +40,7 @@ class SSTask():
         self.test_static = function
         
     def test(self):
-        model = nn.Sequential(self.ext, self.head)
+        model = nn.Sequential(self.tgt_encoder, self.supervision)
         test_su = self.test_static(self.su_te_loader, model)
         test_tu = self.test_static(self.tu_te_loader, model)
         return (test_su + test_tu) / 2, test_su, test_tu
@@ -59,8 +59,8 @@ class SSTask():
         us_tr_inputs, us_tr_labels = us_tr_inputs.cuda(), us_tr_labels.cuda()
         
         self.optimizer.zero_grad()
-        outputs = self.ext(us_tr_inputs)
-        outputs = self.head(outputs)
+        outputs = self.tgt_encoder(us_tr_inputs)
+        outputs = self.supervision(outputs)
         loss = self.criterion(outputs, us_tr_labels)
         loss.backward()
         self.optimizer.step()
