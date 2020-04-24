@@ -1,7 +1,7 @@
 """Adversarial adaptation to train target encoder."""
 
 import os
-import numpy as nn
+import numpy as np
 import torch
 import torch.optim as optim
 from torch import nn
