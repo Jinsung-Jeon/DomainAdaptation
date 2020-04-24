@@ -22,7 +22,7 @@ tgt_model_trained = True
 
 # params for setting up models
 model_root = "snapshots"
-d_input_dims = 10
+d_input_dims = 9
 d_hidden_dims = 500
 d_output_dims = 2
 d_model_restore = "snapshots/ADDA-critic-final.pt"
