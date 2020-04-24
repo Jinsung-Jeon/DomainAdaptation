@@ -11,7 +11,7 @@ from SSHead import extractor_from_layer3
 from parse_tasks import parse_tasks
 import torch.optim as optim
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+os.environ["CUDA_VISIBLE_DEVICES"] = '2'
 if __name__ == '__main__':
     # init random seed
     init_random_seed(params.manual_seed)
