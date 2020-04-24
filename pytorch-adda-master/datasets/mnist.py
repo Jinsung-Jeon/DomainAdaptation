@@ -8,7 +8,7 @@ import params
 def get_mnist(train):
     """Get MNIST dataset loader."""
     # image pre-processing
-    pre_process = transforms.Compose([transforms.ToTensor(),
+    pre_process = transforms.Compose([transforms.Resize(32),transforms.ToTensor(),
                                       transforms.Normalize(
                                           mean=params.dataset_mean,
                                           std=params.dataset_std)])
@@ -31,7 +31,7 @@ def get_mnist(train):
 def get_mnist_set(train):
     """Get MNIST dataset loader."""
     # image pre-processing
-    pre_process = transforms.Compose([transforms.ToTensor(),
+    pre_process = transforms.Compose([transforms.Resize(32),transforms.ToTensor(),
                                       transforms.Normalize(
                                           mean=params.dataset_mean,
                                           std=params.dataset_std)])
