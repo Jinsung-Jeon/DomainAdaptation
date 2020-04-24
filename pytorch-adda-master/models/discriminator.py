@@ -31,7 +31,7 @@ class Discriminator_s(nn.Module):
 
     def __init__(self, input_dims, hidden_dims, output_dims):
         """Init discriminator."""
-        super(Discriminator, self).__init__()
+        super(Discriminator_s, self).__init__()
 
         self.restored = False
 
