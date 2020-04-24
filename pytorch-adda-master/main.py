@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     # Domain Adaptation for Target Domain
     if not (tgt_encoder.restored and critic.restored and params.tgt_model_trained):
-        train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval, src_data_loader_eval, eval_tgt, sstasks)
+        train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval, src_data_loader_eval, eval_tgt)
     '''
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")
