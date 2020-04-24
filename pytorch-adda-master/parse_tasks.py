@@ -15,7 +15,7 @@ from SSTask import SSTask
 from SSHead import linear_on_layer3
 from dset_classes.DsetNoLabel import DsetNoLabel
 
-def parse_tasks(ext, su_tr_dataset, su_te_dataset, tg_tr_dataset, tg_te_dataset):
+def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset):
     sstasks = []
     
     if params.rotation:
