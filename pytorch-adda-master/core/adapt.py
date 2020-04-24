@@ -60,7 +60,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             feat_concat = torch.cat((feat_src, feat_tgt), 0)
             
             # predict on discriminator
-            pred_concat = critic(feat_concat.detach())
+            #pred_concat = critic(feat_concat.detach())
 
             # prepare real and fake label
             label_src = make_variable(torch.ones(feat_src.size(0)).long())
@@ -68,11 +68,11 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             label_concat = torch.cat((label_src, label_tgt), 0)
 
             # compute loss for critic
-            loss_critic = criterion(pred_concat, label_concat)
-            loss_critic.backward()
+            #loss_critic = criterion(pred_concat, label_concat)
+            #loss_critic.backward()
 
             # optimize critic
-            optimizer_critic.step()
+            #optimizer_critic.step()
 
             #pred_cls = torch.squeeze(pred_concat.max(1)[1])
             #_, pred_cls = torch.squeeze(torch.max(pred_concat.data, 1))
@@ -82,21 +82,21 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             ############################
 
             # zero gradients for optimizer
-            optimizer_critic.zero_grad()
+            #optimizer_critic.zero_grad()
             
             # extract and target features
-            feat_tgt = src_classifier(tgt_encoder(images_tgt))
+            #feat_tgt = src_classifier(tgt_encoder(images_tgt))
 
             # predict on discriminator
-            pred_tgt = critic(feat_tgt)
+            #pred_tgt = critic(feat_tgt)
 
             # prepare fake labels
-            label_tgt = make_variable(torch.ones(feat_tgt.size(0)).long())
+            #label_tgt = make_variable(torch.ones(feat_tgt.size(0)).long())
 
             # compute loss for target encoder
-            loss_tgt = criterion(pred_tgt, label_tgt)
-            loss_tgt.backward()
-            optimizer_critic.step()
+            #loss_tgt = criterion(pred_tgt, label_tgt)
+            #loss_tgt.backward()
+            #optimizer_critic.step()
             #######################
             # 2.3 print step info #
             #######################
