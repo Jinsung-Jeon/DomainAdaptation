@@ -29,7 +29,7 @@ d_model_restore = "snapshots/ADDA-critic-final.pt"
 
 s_input_dims = 500
 s_hidden_dims = 250
-s_output_dims = 3
+s_output_dims = 1
 s_model_restore = "snapshots/ADDA-supervision-final.pt"
 
 # params for training network
