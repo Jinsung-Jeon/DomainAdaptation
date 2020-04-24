@@ -21,7 +21,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
     src_classifier.train()
     critic.train()
     sstasks[0].supervision.train()
-    sstasks.scheduler.step()
+    sstasks[0].scheduler.step()
 
     # setup criterion and optimizer
     criterion = nn.CrossEntropyLoss()
