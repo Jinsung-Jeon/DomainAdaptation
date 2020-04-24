@@ -21,9 +21,10 @@ class Discriminator(nn.Module):
             nn.LogSoftmax()
         )
 
-    def forward(self, input):
+    def forward(self, input, alpha):
         """Forward the discriminator."""
-        out = self.layer(input)
+        reverse_feature = ReverseLayerF.apply(input, alpha)
+        out = self.layer(reverse_feature)
         return out
 
 class Discriminator_s(nn.Module):
