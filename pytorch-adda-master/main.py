@@ -41,7 +41,7 @@ if __name__ == '__main__':
     tg_tr_dataset = get_dataset(params.tgt_dataset)
     tg_te_dataset = get_dataset(params.tgt_dataset, split='test')
 
-    sstasks = parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
+    sstasks = parse_tasks(ext, tg_tr_dataset, tg_te_dataset)
     # load models
     parameters = list(tgt_encoder.parameters())
     for sstask in sstasks:

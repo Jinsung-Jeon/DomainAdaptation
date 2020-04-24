@@ -15,7 +15,7 @@ from SSTask import SSTask
 from SSHead import linear_on_layer3
 from dset_classes.DsetNoLabel import DsetNoLabel
 
-def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset):
+def parse_tasks(ext, tg_tr_dataset, tg_te_dataset):
     sstasks = []
     
     if params.rotation:
@@ -27,10 +27,10 @@ def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
             print("No rotation 180 for digits!")
             digit = True
             
-        su_tr_dataset = Rotation(DsetNoLabel(sc_tr_dataset), digit = digit)
-        su_te_dataset = Rotation(DsetNoLabel(sc_te_dataset), digit = digit)
-        su_tr_loader = torchdata.DataLoader(su_tr_dataset, batch_size=params.batch_size//2, shuffle=True, num_workers=4)
-        su_te_loader = torchdata.DataLoader(su_te_dataset, batch_size=params.batch_size//2, shuffle=False, num_workers=4)
+        #su_tr_dataset = Rotation(DsetNoLabel(sc_tr_dataset), digit = digit)
+        #su_te_dataset = Rotation(DsetNoLabel(sc_te_dataset), digit = digit)
+        #su_tr_loader = torchdata.DataLoader(su_tr_dataset, batch_size=params.batch_size//2, shuffle=True, num_workers=4)
+        #su_te_loader = torchdata.DataLoader(su_te_dataset, batch_size=params.batch_size//2, shuffle=False, num_workers=4)
         
         tu_tr_dataset = Rotation(DsetNoLabel(tg_tr_dataset), digit = digit)
         tu_te_dataset = Rotation(DsetNoLabel(tg_te_dataset), digit = digit)
@@ -42,7 +42,7 @@ def parse_tasks(ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
         criterion = nn.CrossEntropyLoss().cuda()
         optimizer = optim.SGD(list(ext.parameters()) + list(head.parameters()), lr = 0.1, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [5, 10], gamma=0.1, last_epoch=-1)
-        sstask = SSTask(ext, head, criterion, optimizer, scheduler, su_tr_loader, su_te_loader, tu_tr_loader, tu_te_loader)
+        sstask = SSTask(ext, head, criterion, optimizer, scheduler, tu_tr_loader, tu_te_loader)
         sstask.assign_test(test)
         sstasks.append(sstask)
         
