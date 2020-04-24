@@ -56,7 +56,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             optimizer_critic.zero_grad()
             #optimizer_critic_c.zero_grad()
             # extract and concat features
-            #feat_src = src_classifier(tgt_encoder(images_src))
+            feat_src = src_classifier(tgt_encoder(images_src))
             #loss_src = criterion(feat_src, images_src_labels)
             #loss_src.backward()
             #optimizer_critic_c.step()
