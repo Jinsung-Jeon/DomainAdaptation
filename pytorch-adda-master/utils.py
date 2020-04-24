@@ -63,7 +63,7 @@ def get_data_loader(name, train=True, split='train'):
     elif name == "mnist":
         return get_mnist(train)
 
-def get_dataest(name, train=True, split='train'):
+def get_dataset(name, train=True, split='train'):
     """Get data loader by name."""
     if name == "svhn":
         return get_svhn_set(split)
