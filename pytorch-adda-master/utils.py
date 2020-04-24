@@ -89,7 +89,6 @@ def init_model(net, restore):
 
     return net
 
-
 def save_model(net, filename):
     """Save trained model."""
     if not os.path.exists(params.model_root):
