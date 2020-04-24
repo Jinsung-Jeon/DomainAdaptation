@@ -20,7 +20,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
     tgt_encoder.train()
     src_classifier.train()
     critic.train()
-    sstasks.supervison.train()
+    sstasks.supervision.train()
     sstasks.scheduler.step()
 
     # setup criterion and optimizer
