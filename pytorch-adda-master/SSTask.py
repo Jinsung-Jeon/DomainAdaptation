@@ -9,10 +9,10 @@ import torch
 import torch.nn as nn
 
 class SSTask():
-    def __init__(self, ext, head, criterion, optimizer, scheduler, su_tr_loader, su_te_loader,tu_tr_loader, tu_te_loader):
+    def __init__(self, tgt_encoder, supervision, criterion, optimizer, scheduler, su_tr_loader, su_te_loader,tu_tr_loader, tu_te_loader):
         self.test_static = None
-        self.tgt_encoder = ext
-        self.supervision = head
+        self.tgt_encoder = tgt_encoder
+        self.supervision = supervision
         self.criterion = criterion
         self.optimizer = optimizer
         self.scheduler = scheduler
