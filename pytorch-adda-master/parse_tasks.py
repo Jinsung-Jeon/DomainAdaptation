@@ -37,6 +37,7 @@ def parse_tasks(tgt_encoder, supervision, sc_tr_dataset, sc_te_dataset, tg_tr_da
         tu_tr_loader = torchdata.DataLoader(tu_tr_dataset, batch_size=params.batch_size//2, shuffle=True, num_workers=4)
         tu_te_loader = torchdata.DataLoader(tu_te_dataset, batch_size=params.batch_size//2, shuffle=False, num_workers=4)
 
+        supervision = supervision.cuda()
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.SGD(list(tgt_encoder.parameters()) + list(supervision.parameters()), lr = 0.1, momentum=0.9, weight_decay=5e-4)
         scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [5, 10], gamma=0.1, last_epoch=-1)
