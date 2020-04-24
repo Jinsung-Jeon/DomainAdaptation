@@ -9,6 +9,7 @@ import torch.nn as nn
 import torch
 from SSHead import extractor_from_layer3
 from parse_tasks import parse_tasks
+import torch.optim as optim
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 if __name__ == '__main__':
