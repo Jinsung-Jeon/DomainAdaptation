@@ -34,10 +34,6 @@ if __name__ == '__main__':
 
     # train source model
     print("=== Training classifier for source domain ===")
-    print(">>> Source Encoder <<<")
-    print(src_encoder)
-    print(">>> Source Classifier <<<")
-    print(src_classifier)
 
     if not (src_encoder.restored and src_classifier.restored and
             params.src_model_trained):
