@@ -34,8 +34,6 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
                                   lr=params.d_learning_rate,
                                   betas=(params.beta1, params.beta2))
 
-    import pdb
-    pdb.set_trace()
     len_data_loader = min(len(src_data_loader), len(tgt_data_loader))
     print("loader done!")
     ####################
