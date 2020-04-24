@@ -1,7 +1,7 @@
 """Discriminator model for ADDA."""
 
 from torch import nn
-
+from functions import ReverseLayerF
 
 class Discriminator(nn.Module):
     """Discriminator model for source domain."""
@@ -41,9 +41,11 @@ class Discriminator_s(nn.Module):
             nn.Linear(hidden_dims, hidden_dims),
             nn.ReLU(),
             nn.Linear(hidden_dims, output_dims),
+            nn.LogSoftmax()
         )
 
-    def forward(self, input):
+    def forward(self, input, alpha):
         """Forward the discriminator."""
-        out = self.layer(input)
+        reverse_feature = ReverseLayerF.apply(input, alpha)
+        out = self.layer(reverse_feature)
         return out
