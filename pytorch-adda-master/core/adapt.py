@@ -10,7 +10,7 @@ from plot_all_epoch_stats import plot_all_epoch_stats
 from utils import make_variable
 
 
-def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt,src_data_loader_eval, ext, scheduler, sstasks):
+def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval, src_data_loader_eval, eval_tgt, sstasks):
     """Train encoder for target domain."""
     ####################
     # 1. setup network #
@@ -20,19 +20,13 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
     tgt_encoder.train()
     src_classifier.train()
     critic.train()
-    for sstask in sstasks:
-        sstask.head.train()
-        sstask.scheduler.step()
+    sstasks.supervison.train()
+    sstasks.scheduler.step()
 
     # setup criterion and optimizer
     criterion = nn.CrossEntropyLoss()
-    optimizer_critic_c = optim.Adam(
-        list(tgt_encoder.parameters()) + list(src_classifier.parameters()),
-        lr=params.d_learning_rate,
-        betas=(params.beta1, params.beta2))
-    optimizer_critic = optim.Adam(list(tgt_encoder.parameters()) + list(src_classifier.parameters()) + list(critic.parameters()),
-                                  lr=params.d_learning_rate,
-                                  betas=(params.beta1, params.beta2))
+    optimizer_critic_c = optim.Adam(list(tgt_encoder.parameters()) + list(src_classifier.parameters()), lr=params.d_learning_rate, betas=(params.beta1, params.beta2))
+    optimizer_critic = optim.Adam(list(tgt_encoder.parameters()) + list(src_classifier.parameters()) + list(critic.parameters()), lr=params.d_learning_rate, betas=(params.beta1, params.beta2))
 
     len_data_loader = min(len(src_data_loader), len(tgt_data_loader))
     print("loader done!")
@@ -45,24 +39,22 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
         data_zip = enumerate(zip(src_data_loader, tgt_data_loader))
         epoch_stats = []
         for step, ((images_src, images_src_labels), (images_tgt, _)) in data_zip:
-            for sstask in sstasks:
-                sstask.train_batch()
+            sstasks.train_batch()
             ###########################
             # 2.1 train discriminator #
             ###########################
-
             # make images variable
             images_src = make_variable(images_src)
             images_src_labels = make_variable(images_src_labels)
             images_tgt = make_variable(images_tgt)
             # zero gradients for optimizer
             optimizer_critic.zero_grad()
-            #optimizer_critic_c.zero_grad()
+            optimizer_critic_c.zero_grad()
             # extract and concat features
             feat_src = src_classifier(tgt_encoder(images_src))
-            #loss_src = criterion(feat_src, images_src_labels)
-            #loss_src.backward()
-            #optimizer_critic_c.step()
+            loss_src = criterion(feat_src, images_src_labels)
+            loss_src.backward()
+            optimizer_critic_c.step()
 
             feat_tgt = src_classifier(tgt_encoder(images_tgt))
             feat_concat = torch.cat((feat_src, feat_tgt), 0)
