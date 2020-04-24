@@ -58,10 +58,10 @@ def init_random_seed(manual_seed):
 
 def get_data_loader(name, train=True, split='train'):
     """Get data loader by name."""
-    if name == "cifar10":
-        return get_cifar10(train)
-    elif name == "stl10":
-        return get_stl10(split)
+    if name == "svhn":
+        return get_svhn(split)
+    elif name == "mnist":
+        return get_mnist(train)
 
 
 def init_model(net, restore):

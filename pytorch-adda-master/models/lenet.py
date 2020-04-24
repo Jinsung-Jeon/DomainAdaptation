@@ -141,7 +141,7 @@ class LeNetClassifier(nn.Module):
             nn.ReLU(),
             nn.Linear(250, 125),
             nn.ReLU(),
-            nn.Linear(125, 9),
+            nn.Linear(125, 10),
         )
 
     def forward(self, feat):

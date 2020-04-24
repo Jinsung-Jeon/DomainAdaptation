@@ -10,19 +10,19 @@ batch_size = 256
 image_size = 32
 
 # params for source dataset
-src_dataset = "cifar10"
+src_dataset = "svhn"
 src_encoder_restore = "snapshots/ADDA-source-encoder-final.pt"
 src_classifier_restore = "snapshots/ADDA-source-classifier-final.pt"
 src_model_trained = True
 
 # params for target dataset
-tgt_dataset = "stl10"
+tgt_dataset = "mnist"
 tgt_encoder_restore = "snapshots/ADDA-target-encoder-final.pt"
 tgt_model_trained = True
 
 # params for setting up models
 model_root = "snapshots"
-d_input_dims = 9
+d_input_dims = 10
 d_hidden_dims = 500
 d_output_dims = 2
 d_model_restore = "snapshots/ADDA-critic-final.pt"
