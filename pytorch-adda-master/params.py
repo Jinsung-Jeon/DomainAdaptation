@@ -50,3 +50,5 @@ beta2 = 0.9
 outf = 'output'
 
 rotation = True
+quadrant = False
+flip = False
