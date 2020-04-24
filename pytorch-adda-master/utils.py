@@ -63,6 +63,13 @@ def get_data_loader(name, train=True, split='train'):
     elif name == "mnist":
         return get_mnist(train)
 
+def get_dataest(name, train=True, split='train'):
+    """Get data loader by name."""
+    if name == "svhn":
+        return get_svhn_set(split)
+    elif name == "mnist":
+        return get_mnist_set(train)
+
 
 def init_model(net, restore):
     """Init models with cuda and weights."""

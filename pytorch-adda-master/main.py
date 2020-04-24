@@ -7,6 +7,8 @@ from utils import get_data_loader, init_model, init_random_seed
 import os
 import torch.nn as nn
 import torch
+from SSHead import extractor_from_layer3
+from parse_tasks import parse_tasks
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 if __name__ == '__main__':
@@ -30,8 +32,19 @@ if __name__ == '__main__':
                              restore=params.tgt_encoder_restore)
     critic = init_model(Discriminator(input_dims=params.d_input_dims, hidden_dims=params.d_hidden_dims, output_dims=params.d_output_dims),
                         restore=params.d_model_restore)
-    # load models
+    ext = init_model(net = extractor_from_layer3(ResNetEncoder(depth=26)),
+                     restore = params.extrac_restore)
 
+    sc_tr_dataset = get_dataset(params.src_dataset)
+    sc_te_dataset = get_dataset(params.src_dataset, train=False)
+    tg_tr_dataset = get_dataset(params.tgt_dataset)
+    tg_te_dataset = get_dtaaset(params.tgt_dataset, split='test')
+
+    sstasks = parse_tasks(params, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
+    # load models
+    parameters = list(tgt_encoder.parameters())
+    for sstask in sstasks:
+        parameters += list(sstask.head.parameters())
     # train source model
     print("=== Training classifier for source domain ===")
 
@@ -54,7 +67,7 @@ if __name__ == '__main__':
 
     if not (tgt_encoder.restored and critic.restored and
             params.tgt_model_trained):
-        train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt,src_data_loader_eval)
+        train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt,src_data_loader_eval, ext, scheduler,sstasks)
     '''
     # eval target encoder on test set of target dataset
     print("=== Evaluating classifier for encoded target domain ===")

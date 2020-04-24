@@ -27,6 +27,8 @@ d_hidden_dims = 500
 d_output_dims = 2
 d_model_restore = "snapshots/ADDA-critic-final.pt"
 
+extrac_restore = "snapshots/ADDA-extrac-final.pt"
+
 # params for training network
 num_gpu = 3
 num_epochs_pre = 50
@@ -46,3 +48,5 @@ beta2 = 0.9
 
 # show plot
 outf = 'output'
+
+rotation = True

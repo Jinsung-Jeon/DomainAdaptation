@@ -10,7 +10,7 @@ from plot_all_epoch_stats import plot_all_epoch_stats
 from utils import make_variable
 
 
-def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt,src_data_loader_eval):
+def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loader, tgt_data_loader_eval,eval_tgt,src_data_loader_eval, ext, scheduler, sstasks):
     """Train encoder for target domain."""
     ####################
     # 1. setup network #
@@ -20,6 +20,9 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
     tgt_encoder.train()
     src_classifier.train()
     critic.train()
+    for sstask in sstasks:
+        sstask.head.train()
+        sstask.scheduler.step()
 
     # setup criterion and optimizer
     criterion = nn.CrossEntropyLoss()
@@ -44,6 +47,8 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
         data_zip = enumerate(zip(src_data_loader, tgt_data_loader))
         epoch_stats = []
         for step, ((images_src, images_src_labels), (images_tgt, _)) in data_zip:
+            for sstask in sstasks:
+                sstask.train_batch()
             ###########################
             # 2.1 train discriminator #
             ###########################
@@ -54,12 +59,12 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             images_tgt = make_variable(images_tgt)
             # zero gradients for optimizer
             optimizer_critic.zero_grad()
-            #optimizer_critic_c.zero_grad()
+            optimizer_critic_c.zero_grad()
             # extract and concat features
             feat_src = src_classifier(tgt_encoder(images_src))
-            #loss_src = criterion(feat_src, images_src_labels)
-            #loss_src.backward()
-            #optimizer_critic_c.step()
+            loss_src = criterion(feat_src, images_src_labels)
+            loss_src.backward()
+            optimizer_critic_c.step()
 
             feat_tgt = src_classifier(tgt_encoder(images_tgt))
             feat_concat = torch.cat((feat_src, feat_tgt), 0)

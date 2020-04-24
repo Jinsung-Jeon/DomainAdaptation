@@ -27,3 +27,22 @@ def get_mnist(train):
         shuffle=True)
 
     return mnist_data_loader
+
+def get_mnist_set(train):
+    """Get MNIST dataset loader."""
+    # image pre-processing
+    pre_process = transforms.Compose([transforms.ToTensor(),
+                                      transforms.Normalize(
+                                          mean=params.dataset_mean,
+                                          std=params.dataset_std)])
+
+    # dataset and data loader
+    mnist_dataset = datasets.MNIST(root=params.data_root,
+                                   train=train,
+                                   transform=pre_process,
+                                   download=True)
+
+    mnist_dataset = ThreeChannels(mnist_dataset)
+
+    return mnist_dataset
+
