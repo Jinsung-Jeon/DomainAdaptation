@@ -39,7 +39,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             ###########################
             # 2.1 train discriminator #
             ###########################
-            p = float(step + epoch * len_dataloader) / params.num_epochs / len_dataloader
+            p = float(step + epoch * len_data_loader) / params.num_epochs / len_data_loader
             alpha = 2. / (1. + np.exp(-10 * p)) - 1
             # make images variable
             images_src = make_variable(images_src)
