@@ -59,7 +59,9 @@ if __name__ == '__main__':
 
     # train target encoder by GAN
     print("=== Training encoder for target domain ===")
-
+    optimizer = optim.SGD(parameters, lr=0.1, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [5, 10], gamma=0.1,
+                                                     last_epoch=-1)
     # init weights of target encoder with those of source encoder
     if not tgt_encoder.restored:
         tgt_encoder.load_state_dict(src_encoder.state_dict())
