@@ -28,9 +28,9 @@ d_output_dims = 2
 d_model_restore = "snapshots/ADDA-critic-final.pt"
 
 s_input_dims = 500
-d_hidden_dims = 250
-d_output_dims = 2
-extrac_restore = "snapshots/ADDA-extrac-final.pt"
+s_hidden_dims = 250
+s_output_dims = 2
+s_model_restore = "snapshots/ADDA-supervision-final.pt"
 
 # params for training network
 num_gpu = 3

@@ -32,7 +32,7 @@ if __name__ == '__main__':
     src_classifier = init_model(net=LeNetClassifier(), restore=params.src_classifier_restore)
     tgt_encoder = init_model(net=ResNetEncoder(depth=26), restore=params.tgt_encoder_restore)
     critic = init_model(Discriminator(input_dims=params.d_input_dims, hidden_dims=params.d_hidden_dims, output_dims=params.d_output_dims), restore=params.d_model_restore)
-    supervision = init_model(Discriminator(input_dims=params.d_input_dims, hidden_dims=params.d_hidden_dims, output_dims=params.d_output_dims), restore=params.d_model_restore)
+    supervision = init_model(Discriminator(input_dims=params.s_input_dims, hidden_dims=params.s_hidden_dims, output_dims=params.s_output_dims), restore=params.s_model_restore)
 
     sstasks = parse_tasks(tgt_encoder, supervision, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
 
