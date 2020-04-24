@@ -57,12 +57,12 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             images_tgt = make_variable(images_tgt)
             # zero gradients for optimizer
             optimizer_critic.zero_grad()
-            optimizer_critic_c.zero_grad()
+            #optimizer_critic_c.zero_grad()
             # extract and concat features
             feat_src = src_classifier(tgt_encoder(images_src))
-            loss_src = criterion(feat_src, images_src_labels)
-            loss_src.backward()
-            optimizer_critic_c.step()
+            #loss_src = criterion(feat_src, images_src_labels)
+            #loss_src.backward()
+            #optimizer_critic_c.step()
 
             feat_tgt = src_classifier(tgt_encoder(images_tgt))
             feat_concat = torch.cat((feat_src, feat_tgt), 0)
