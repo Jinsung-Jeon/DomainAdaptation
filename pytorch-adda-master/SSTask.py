@@ -56,7 +56,7 @@ class SSTask():
         us_tr_labels = torch.cat((su_tr_labels, tu_tr_labels))
         #us_tr_inputs = tu_tr_inputs
         #us_tr_labels = tu_tr_labels
-        us_tr_inputs, us_tr_labels = us_tr_inputs.cuda(), us_tr_labels.cuda()
+        us_tr_inputs, us_tr_labels = us_tr_inputs, us_tr_labels
         
         self.optimizer.zero_grad()
         outputs = self.tgt_encoder(us_tr_inputs)
