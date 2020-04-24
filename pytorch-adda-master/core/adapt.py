@@ -39,7 +39,7 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
         data_zip = enumerate(zip(src_data_loader, tgt_data_loader))
         epoch_stats = []
         for step, ((images_src, images_src_labels), (images_tgt, _)) in data_zip:
-            sstasks.train_batch()
+            sstasks[0].train_batch()
             ###########################
             # 2.1 train discriminator #
             ###########################
