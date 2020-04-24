@@ -9,7 +9,7 @@ import torch.backends.cudnn as cudnn
 from torch.autograd import Variable
 
 import params
-from datasets import get_mnist, get_usps, get_svhn, get_cifar10, get_stl10
+from datasets import get_mnist, get_usps, get_svhn, get_cifar10, get_stl10, get_mnist_set, get_svhn_set
 
 
 def make_variable(tensor):
