@@ -3,7 +3,7 @@
 import params
 from core import eval_src, eval_tgt, train_src, train_tgt
 from models import Discriminator, LeNetClassifier, LeNetEncoder, ResNetEncoder
-from utils import get_data_loader, init_model, init_random_seed
+from utils import get_data_loader, init_model, init_random_seed, get_dataset
 import os
 import torch.nn as nn
 import torch
