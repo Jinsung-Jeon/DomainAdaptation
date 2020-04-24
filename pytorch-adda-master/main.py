@@ -38,7 +38,7 @@ if __name__ == '__main__':
     sc_tr_dataset = get_dataset(params.src_dataset)
     sc_te_dataset = get_dataset(params.src_dataset, train=False)
     tg_tr_dataset = get_dataset(params.tgt_dataset)
-    tg_te_dataset = get_dtaaset(params.tgt_dataset, split='test')
+    tg_te_dataset = get_dataset(params.tgt_dataset, split='test')
 
     sstasks = parse_tasks(params, ext, sc_tr_dataset, sc_te_dataset, tg_tr_dataset, tg_te_dataset)
     # load models
