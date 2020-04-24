@@ -54,12 +54,12 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             images_tgt = make_variable(images_tgt)
             # zero gradients for optimizer
             optimizer_critic.zero_grad()
-            optimizer_critic_c.zero_grad()
+            #optimizer_critic_c.zero_grad()
             # extract and concat features
-            feat_src = src_classifier(tgt_encoder(images_src))
-            loss_src = criterion(feat_src, images_src_labels)
-            loss_src.backward()
-            optimizer_critic_c.step()
+            #feat_src = src_classifier(tgt_encoder(images_src))
+            #loss_src = criterion(feat_src, images_src_labels)
+            #loss_src.backward()
+            #optimizer_critic_c.step()
 
             feat_tgt = src_classifier(tgt_encoder(images_tgt))
             feat_concat = torch.cat((feat_src, feat_tgt), 0)
@@ -102,12 +102,10 @@ def train_tgt(tgt_encoder, src_classifier, critic, src_data_loader, tgt_data_loa
             loss_tgt = criterion(pred_tgt, label_tgt)
             loss_tgt.backward()
 
-            # extract and concat features
-            feat_src = src_classifier(tgt_encoder(images_src))
             #######################
             # 2.3 print step info #
             #######################
-            if ((step+1) == 17):
+            if ((step+1) == 230):
             #if ((step + 1) % params.log_step == 0):
                 tot_loss, acc = eval_tgt(tgt_encoder, src_classifier, tgt_data_loader_eval)
                 tot_loss_s, acc_s = eval_tgt(tgt_encoder, src_classifier, src_data_loader_eval)

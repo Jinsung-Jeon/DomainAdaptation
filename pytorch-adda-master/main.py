@@ -8,7 +8,7 @@ import os
 import torch.nn as nn
 import torch
 
-os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2'
+os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 if __name__ == '__main__':
     # init random seed
     init_random_seed(params.manual_seed)

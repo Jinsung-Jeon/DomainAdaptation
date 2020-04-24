@@ -64,5 +64,5 @@ def plot_all_epoch_stats(all_epoch_stats, outf):
 	plt.xlabel('epoch')
 	plt.ylabel('test error (%)')
 	plt.legend()
-	plt.savefig('%s/loss.pdf' %(outf))
+	plt.savefig('%s/loss_noclass.pdf' %(outf))
 	plt.close()
